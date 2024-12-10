@@ -1,0 +1,6 @@
+@AzadTurkSln.WebApi_HostAddress = http://localhost:5119
+
+GET {{AzadTurkSln.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
