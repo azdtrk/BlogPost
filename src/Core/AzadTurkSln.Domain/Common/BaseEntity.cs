@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AzadTurkSln.Domain.Common
+﻿namespace AzadTurkSln.Domain.Common
 {
     public class BaseEntity
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
 
         public DateTime DateCreated { get; set; } = new DateTime();
     }
