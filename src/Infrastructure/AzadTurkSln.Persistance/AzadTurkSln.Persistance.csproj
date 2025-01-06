@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Core\AzadTurkSln.Domain\AzadTurkSln.Domain.csproj" />
+    <ProjectReference Include="..\..\Core\AzadTurkSln.Application\AzadTurkSln.Application.csproj" />
   </ItemGroup>
 
 </Project>

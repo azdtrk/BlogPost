@@ -1,7 +1,6 @@
 ﻿using AzadTurkSln.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Reflection.Emit;
 
 namespace AzadTurkSln.Persistance.Configurations
 {
@@ -27,6 +26,9 @@ namespace AzadTurkSln.Persistance.Configurations
                 .HasMaxLength(128)
                 .HasColumnType("nvarchar(128)");
 
+            entity.Property(u => u.About)
+                .HasColumnType("nvarchar(max)");
+
             entity.Property(u => u.Role)
                 .IsRequired()
                 .HasColumnType("int");
@@ -36,6 +38,20 @@ namespace AzadTurkSln.Persistance.Configurations
                 .WithOne(bp => bp.Author)
                 .HasForeignKey(bp => bp.AuthorId)
                 .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            /* One-to-many between User and Comment */
+            entity.HasMany(u => u.Comments)
+                .WithOne(c => c.User)
+                .HasForeignKey(c => c.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            /* One-to-one between User and Image */
+            entity.HasOne(u => u.ProfilePhoto)
+                .WithOne(i => i.User)
+                .HasForeignKey<User>(u => u.ProfilePhotoId)
+                .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
 
         }

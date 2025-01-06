@@ -1,9 +1,14 @@
 ﻿namespace AzadTurkSln.Domain.Common
 {
-    public class BaseEntity
+    public class BaseEntity 
     {
         public int Id { get; set; }
 
-        public DateTime DateCreated { get; set; } = new DateTime();
+        public DateTime DateCreated { get; set; }
+
+        public BaseEntity()
+        {
+            DateCreated = DateTime.UtcNow;
+        }
     }
 }
