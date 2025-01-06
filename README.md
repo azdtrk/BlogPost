@@ -29,4 +29,4 @@ Why CQRS: Seperating Commands and Queries has several benefits such as:
 
 
 # P.S.
-- Everthing in this repository will be developed and maintained, alongside with my full-time job, including the Read.Me :)
+- Everthing in this repository will be developed and maintained, including the Read.Me :)
