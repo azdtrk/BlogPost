@@ -1,7 +1,6 @@
 ﻿using AzadTurkSln.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Reflection.Emit;
 
 namespace AzadTurkSln.Persistance.Configurations
 {
@@ -21,19 +20,12 @@ namespace AzadTurkSln.Persistance.Configurations
             entity.Property(c => c.IsApproved)
                 .HasColumnType("bit");
 
-            /* One-to-many between Comments and User*/
-            entity.HasOne(u => u.User)
-                .WithMany(c => c.Comments)
-                .HasForeignKey(bp => bp.UserId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.NoAction);
-
-            /* One-to-many between Comments and BlogPost*/
-            entity.HasOne(bp => bp.BlogPost)
-                .WithMany(c => c.Comments)
-                .HasForeignKey(c => c.BlogPostId)
-                .IsRequired()
-                .OnDelete(DeleteBehavior.NoAction);
+            /* One-to-many between Comment and CommentReply */
+            entity.HasOne(c => c.ParentComment)
+                .WithMany(r => r.Replies)
+                .HasForeignKey(r => r.ParentCommentId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
 

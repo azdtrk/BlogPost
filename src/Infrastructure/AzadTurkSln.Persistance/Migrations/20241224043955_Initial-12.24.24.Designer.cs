@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AzadTurkSln.Persistance.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241215170932_Initial")]
-    partial class Initial
+    [Migration("20241224043955_Initial-12.24.24")]
+    partial class Initial122424
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,6 +52,9 @@ namespace AzadTurkSln.Persistance.Migrations
                     b.Property<DateTime>("DateUpdated")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("LikeCount")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -84,6 +87,9 @@ namespace AzadTurkSln.Persistance.Migrations
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
+                    b.Property<int>("ParentCommentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -91,9 +97,50 @@ namespace AzadTurkSln.Persistance.Migrations
 
                     b.HasIndex("BlogPostId");
 
+                    b.HasIndex("ParentCommentId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("AzadTurkSln.Domain.Entities.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BlogPostId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Storage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BlogPostId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Images");
                 });
 
             modelBuilder.Entity("AzadTurkSln.Domain.Entities.User", b =>
@@ -122,6 +169,9 @@ namespace AzadTurkSln.Persistance.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
+                    b.Property<int>("ProfilePhotoId")
+                        .HasColumnType("int");
+
                     b.Property<int>("Role")
                         .HasColumnType("int");
 
@@ -149,10 +199,37 @@ namespace AzadTurkSln.Persistance.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.HasOne("AzadTurkSln.Domain.Entities.Comment", "ParentComment")
+                        .WithMany("Replies")
+                        .HasForeignKey("ParentCommentId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
                     b.HasOne("AzadTurkSln.Domain.Entities.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("BlogPost");
+
+                    b.Navigation("ParentComment");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AzadTurkSln.Domain.Entities.Image", b =>
+                {
+                    b.HasOne("AzadTurkSln.Domain.Entities.BlogPost", "BlogPost")
+                        .WithMany("Images")
+                        .HasForeignKey("BlogPostId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("AzadTurkSln.Domain.Entities.User", "User")
+                        .WithOne("ProfilePhoto")
+                        .HasForeignKey("AzadTurkSln.Domain.Entities.Image", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("BlogPost");
@@ -163,6 +240,13 @@ namespace AzadTurkSln.Persistance.Migrations
             modelBuilder.Entity("AzadTurkSln.Domain.Entities.BlogPost", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("AzadTurkSln.Domain.Entities.Comment", b =>
+                {
+                    b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("AzadTurkSln.Domain.Entities.User", b =>
@@ -170,6 +254,8 @@ namespace AzadTurkSln.Persistance.Migrations
                     b.Navigation("BlogPosts");
 
                     b.Navigation("Comments");
+
+                    b.Navigation("ProfilePhoto");
                 });
 #pragma warning restore 612, 618
         }
