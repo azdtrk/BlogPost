@@ -24,7 +24,7 @@ namespace AzadTurkSln.Persistance.Repositories
             return query;
         }
 
-        public async Task<T> GetByIdAsync(int id, bool tracking = true)
+        public async Task<T> GetByIdAsync(Guid id, bool tracking = true)
         {
             var query = Table.AsQueryable();
             if (!tracking)

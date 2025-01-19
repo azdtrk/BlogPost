@@ -29,10 +29,6 @@ namespace AzadTurkSln.Persistance.Configurations
             entity.Property(u => u.About)
                 .HasColumnType("nvarchar(max)");
 
-            entity.Property(u => u.Role)
-                .IsRequired()
-                .HasColumnType("int");
-
             /* One-to-many between User and BlogPost */
             entity.HasMany(u => u.BlogPosts)
                 .WithOne(bp => bp.Author)
@@ -54,6 +50,19 @@ namespace AzadTurkSln.Persistance.Configurations
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            /* One-to-one between DomainUser and ApplicationUser */
+            entity.HasOne(u => u.ApplicationUser)
+                .WithOne(au => au.DomainUser)
+                .HasForeignKey<User>(u => u.ApplicationUserId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            /* One-to-one between User and ApplicationUserRole */
+            entity.HasOne(u => u.ApplicationUserRole)
+                .WithOne(au => au.DomainUser)
+                .HasForeignKey<User>(u => u.ApplicationUserRoleId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

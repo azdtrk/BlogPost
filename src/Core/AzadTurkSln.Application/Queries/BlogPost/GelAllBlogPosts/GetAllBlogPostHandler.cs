@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AzadTurkSln.Application.Queries.BlogPost.GelAllBlogPosts
 {
-    public class GetAllBlogPostHandler : IRequestHandler<GetAllBlogPostRequest, ServiceResponse<GetAllBlogPostResponse>>
+    public class GetAllBlogPostHandler : IRequestHandler<GetAllBlogPostRequest, GetAllBlogPostResponse>
     {
         private readonly IBlogPostReadRepository _blogPostReadRpository;
         private readonly IMapper _mapper;
@@ -19,7 +19,7 @@ namespace AzadTurkSln.Application.Queries.BlogPost.GelAllBlogPosts
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<GetAllBlogPostResponse>> Handle(GetAllBlogPostRequest request, CancellationToken cancellationToken)
+        public async Task<GetAllBlogPostResponse> Handle(GetAllBlogPostRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -35,10 +35,10 @@ namespace AzadTurkSln.Application.Queries.BlogPost.GelAllBlogPosts
 
                 var response = new GetAllBlogPostResponse()
                 {
-                    BlogPosts = blogPostListDto
+                    Value = blogPostListDto
                 };
                 
-                return new ServiceResponse<GetAllBlogPostResponse>(response);
+                return response;
             }
             catch (Exception ex)
             {

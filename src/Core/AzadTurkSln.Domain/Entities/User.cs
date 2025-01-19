@@ -10,25 +10,27 @@ namespace AzadTurkSln.Domain.Entities
 
         public string Password { get; set; } = string.Empty;
 
-        public string? About { get; set; }
+        public string PasswordHash { get; set; } = string.Empty;
 
-        public UserRole Role { get; set; } = UserRole.Reader;
+        public string? About { get; set; }
 
 
         #region Navigation Properties
+
+        public Guid ApplicationUserId { get; set; }
+        public ApplicationUser? ApplicationUser { get; set; }
+
+        public Guid ApplicationUserRoleId { get; set; }
+        public ApplicationUserRole? ApplicationUserRole { get; set; }
 
         public List<Comment>? Comments { get; set; }
 
         public List<BlogPost>? BlogPosts { get; set; }
 
-        public int? ProfilePhotoId { get; set; }
+        public Guid? ProfilePhotoId { get; set; }
         public Image? ProfilePhoto { get; set; }
 
         #endregion
     }
-    public enum UserRole
-    {
-        Author,
-        Reader
-    }
+    
 }

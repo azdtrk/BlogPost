@@ -4,12 +4,12 @@
     {
         #region Navigation Properties
 
-        public int? BlogPostId { get; set; }
+        public Guid? BlogPostId { get; set; }
         public BlogPost? BlogPost { get; set; }
 
         public BlogPost? ThumbnailForBlogPost { get; set; }
 
-        public int? UserId { get; set; }
+        public Guid? UserId { get; set; }
         public User? User { get; set; }
 
         #endregion

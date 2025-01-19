@@ -38,7 +38,7 @@ namespace AzadTurkSln.WebApi.Controllers
         {
             try
             {
-                ServiceResponse<GetAllBlogPostResponse> response = await this.Mediator.Send(getAllBlogPostQueryRequest);
+                GetAllBlogPostResponse response = await this.Mediator.Send(getAllBlogPostQueryRequest);
                 return Ok(response);
             }
             catch (Exception ex)
@@ -53,7 +53,7 @@ namespace AzadTurkSln.WebApi.Controllers
         {
             try
             {
-                ServiceResponse<GetBlogPostByIdResponse> response = await this.Mediator.Send(GetBlogPostByIdRequest);
+                GetBlogPostByIdResponse response = await this.Mediator.Send(GetBlogPostByIdRequest);
                 return Ok(response);
             }
             catch (Exception ex)

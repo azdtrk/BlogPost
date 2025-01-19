@@ -3,8 +3,8 @@ using MediatR;
 
 namespace AzadTurkSln.Application.Commands.Comment.DeleteComment
 {
-    public class DeleteCommentRequest : IRequest<ServiceResponse<DeleteCommentResponse>>
+    public class DeleteCommentRequest : IRequest<DeleteCommentResponse>
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
     }
 }

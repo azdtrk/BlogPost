@@ -15,13 +15,13 @@ namespace AzadTurkSln.Domain.Entities
 
         #region Navigation Properties
 
-        public int UserId { get; set; }
+        public Guid UserId { get; set; }
         public User User { get; set; } = new User();
 
-        public int BlogPostId { get; set; }
+        public Guid BlogPostId { get; set; }
         public BlogPost BlogPost { get; set; } = new BlogPost();
 
-        public int? ParentCommentId { get; set; }
+        public Guid? ParentCommentId { get; set; }
         public Comment ParentComment { get; set; } = new Comment();
         public ICollection<Comment>? Replies { get; set; } = new List<Comment>();
 

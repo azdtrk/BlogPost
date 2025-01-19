@@ -2,8 +2,8 @@
 
 namespace AzadTurkSln.Application.Commands.BlogPost.DeleteBlogPost
 {
-    public class DeleteBlogPostResponse
+    public class DeleteBlogPostResponse : ServiceResponse<string>
     {
-        public string Message { get; set; } = string.Empty;
+
     }
 }

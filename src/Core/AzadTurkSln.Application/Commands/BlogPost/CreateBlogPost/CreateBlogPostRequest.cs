@@ -1,10 +1,9 @@
-﻿using AzadTurkSln.Application.Wrappers;
-using AzadTurkSln.Domain.Entities;
+﻿using AzadTurkSln.Domain.Entities;
 using MediatR;
 
 namespace AzadTurkSln.Application.Commands.BlogPost.CreateBlogPost
 {
-    public class CreateBlogPostRequest : IRequest<ServiceResponse<CreateBlogPostResponse>>
+    public class CreateBlogPostRequest : IRequest<CreateBlogPostResponse>
     {
         public string Title { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;

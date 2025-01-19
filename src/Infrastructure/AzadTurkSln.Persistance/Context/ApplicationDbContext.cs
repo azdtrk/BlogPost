@@ -1,15 +1,17 @@
 ﻿using AzadTurkSln.Domain.Entities;
 using AzadTurkSln.Persistance.Configurations;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace AzadTurkSln.Persistance.Context
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationUserRole, Guid>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<BlogPost>? BlogPosts { get; set; }
-        public DbSet<User>? Users { get; set; }
+        public DbSet<User>? DomainUsers { get; set; }
         public DbSet<Comment>? Comments { get; set; }
         public DbSet<Image>? Images { get; set; }
         public DbSet<ExceptionLog>? ExceptionLogs { get; set; }
@@ -20,6 +22,11 @@ namespace AzadTurkSln.Persistance.Context
             modelBuilder.ApplyConfiguration(new BlogPostsConfiguration());
             modelBuilder.ApplyConfiguration(new CommentsConfiguration());
             modelBuilder.ApplyConfiguration(new ExceptionLogConfiguration());
+
+            modelBuilder.Entity<IdentityUser>()
+                        .Ignore(c => c.TwoFactorEnabled)
+                        .Ignore(c => c.ConcurrencyStamp)
+                        .Ignore(c => c.EmailConfirmed);
 
             base.OnModelCreating(modelBuilder);
         }

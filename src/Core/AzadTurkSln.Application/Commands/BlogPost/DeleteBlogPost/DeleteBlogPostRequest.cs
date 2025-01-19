@@ -1,10 +1,9 @@
-﻿using AzadTurkSln.Application.Wrappers;
-using MediatR;
+﻿using MediatR;
 
 namespace AzadTurkSln.Application.Commands.BlogPost.DeleteBlogPost
 {
-    public class DeleteBlogPostRequest : IRequest<ServiceResponse<DeleteBlogPostResponse>>
+    public class DeleteBlogPostRequest : IRequest<DeleteBlogPostResponse>
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
     }
 }

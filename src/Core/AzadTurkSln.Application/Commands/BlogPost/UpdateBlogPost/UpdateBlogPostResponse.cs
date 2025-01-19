@@ -1,10 +1,10 @@
 ﻿using AzadTurkSln.Application.DTOs.BlogPost;
-using AzadTurkSln.Application.DTOs.Comment;
+using AzadTurkSln.Application.Wrappers;
 
 namespace AzadTurkSln.Application.Commands.BlogPost.UpdateBlogPost
 {
-    public class UpdateBlogPostResponse
+    public class UpdateBlogPostResponse : ServiceResponse<BlogPostUpdateDto>
     {
-        public BlogPostUpdateDto updatedBlogPost { get; set; }
+
     }
 }

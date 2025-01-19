@@ -10,7 +10,7 @@ using ValidationException = FluentValidation.ValidationException;
 
 namespace AzadTurkSln.Application.Commands.BlogPost.UpdateBlogPost
 {
-    public class UpdateBlogPostHandler : IRequestHandler<UpdateBlogPostRequest, ServiceResponse<UpdateBlogPostResponse>>
+    public class UpdateBlogPostHandler : IRequestHandler<UpdateBlogPostRequest, UpdateBlogPostResponse>
     {
         private readonly IBlogPostWriteRepository _blogPostWriteRepository;
         private readonly IBlogPostReadRepository _blogPostReadRepository;
@@ -32,7 +32,7 @@ namespace AzadTurkSln.Application.Commands.BlogPost.UpdateBlogPost
             _logger = logger;
         }
 
-        public async Task<ServiceResponse<UpdateBlogPostResponse>> Handle(UpdateBlogPostRequest request, CancellationToken cancellationToken)
+        public async Task<UpdateBlogPostResponse> Handle(UpdateBlogPostRequest request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request, cancellationToken);
 
@@ -47,7 +47,7 @@ namespace AzadTurkSln.Application.Commands.BlogPost.UpdateBlogPost
             var blogPostToBeUpdated = await _blogPostReadRepository.GetByIdAsync(request.Id);
 
             if (blogPostToBeUpdated == null)
-                throw new NotFoundException(nameof(BlogPost), request.Id);
+                throw new EntityNotFoundException(nameof(BlogPost), request.Id);
 
             blogPostToBeUpdated.Title = request.Content;
             blogPostToBeUpdated.Preface = request.Content;
@@ -57,14 +57,14 @@ namespace AzadTurkSln.Application.Commands.BlogPost.UpdateBlogPost
 
             _blogPostWriteRepository.Update(blogPostToBeUpdated);
 
-            var blogPostDto = _mapper.Map<BlogPostUpdateDto>(blogPostToBeUpdated);
+            var blogPostUpdateDto = _mapper.Map<BlogPostUpdateDto>(blogPostToBeUpdated);
 
             var response = new UpdateBlogPostResponse()
             {
-                updatedBlogPost = blogPostDto
+                Value = blogPostUpdateDto
             };
 
-            return new ServiceResponse<UpdateBlogPostResponse>(response);
+            return response;
 
         }
     }
