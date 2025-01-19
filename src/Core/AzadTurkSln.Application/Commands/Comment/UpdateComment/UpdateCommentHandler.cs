@@ -10,7 +10,7 @@ using ValidationException = FluentValidation.ValidationException;
 
 namespace AzadTurkSln.Application.Commands.Comment.UpdateComment
 {
-    public class UpdateCommentHandler : IRequestHandler<UpdateCommentRequest, ServiceResponse<UpdateCommentResponse>>
+    public class UpdateCommentHandler : IRequestHandler<UpdateCommentRequest, UpdateCommentResponse>
     {
         private readonly ICommentWriteRepository _commentWriteRepository;
         private readonly ICommentReadRepository _commentReadRepository;
@@ -33,7 +33,7 @@ namespace AzadTurkSln.Application.Commands.Comment.UpdateComment
             _logger = logger;
         }
 
-        public async Task<ServiceResponse<UpdateCommentResponse>> Handle(UpdateCommentRequest request, CancellationToken cancellationToken)
+        public async Task<UpdateCommentResponse> Handle(UpdateCommentRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace AzadTurkSln.Application.Commands.Comment.UpdateComment
                 var commentToBeUpdated = await _commentReadRepository.GetByIdAsync(request.Id);
 
                 if (commentToBeUpdated == null)
-                    throw new NotFoundException(nameof(Comment), request.Id);
+                    throw new EntityNotFoundException(nameof(Comment), request.Id);
 
                 commentToBeUpdated.Content = request.Content;
 
@@ -60,10 +60,10 @@ namespace AzadTurkSln.Application.Commands.Comment.UpdateComment
 
                 var response = new UpdateCommentResponse()
                 {
-                    updatedComment = commentDto
+                    Value = commentDto
                 };
 
-                return new ServiceResponse<UpdateCommentResponse>(response);
+                return response;
             }
             catch (Exception ex)
             {

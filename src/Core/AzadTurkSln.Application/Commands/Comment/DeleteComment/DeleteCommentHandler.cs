@@ -8,7 +8,7 @@ using ValidationException = FluentValidation.ValidationException;
 
 namespace AzadTurkSln.Application.Commands.Comment.DeleteComment
 {
-    public class DeleteCommentHandler : IRequestHandler<DeleteCommentRequest, ServiceResponse<DeleteCommentResponse>>
+    public class DeleteCommentHandler : IRequestHandler<DeleteCommentRequest, DeleteCommentResponse>
     {
         private readonly ICommentWriteRepository _commentWriteRepository;
         private readonly IValidator<DeleteCommentRequest> _validator;
@@ -25,7 +25,7 @@ namespace AzadTurkSln.Application.Commands.Comment.DeleteComment
             _logger = logger;
         }
 
-        public async Task<ServiceResponse<DeleteCommentResponse>> Handle(DeleteCommentRequest request, CancellationToken cancellationToken)
+        public async Task<DeleteCommentResponse> Handle(DeleteCommentRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace AzadTurkSln.Application.Commands.Comment.DeleteComment
                     Message = $"Comment with Id: {request.Id} has been deleted"
                 };
 
-                return new ServiceResponse<DeleteCommentResponse>(response);
+                return response;
             }
             catch (Exception ex)
             {

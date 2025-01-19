@@ -50,9 +50,13 @@ namespace AzadTurkSln.Application.Middleware
                     response.StatusCode = (int) HttpStatusCode.BadRequest;
                     Log.Warning(error, "Validation Exception occurred {@LogProperties}", logProperties);
                     break;
-                case NotFoundException:
+                case EntityNotFoundException:
                     response.StatusCode = (int) HttpStatusCode.NotFound;
-                    Log.Warning(error, "Not Found Exception occurred {@LogProperties}", logProperties);
+                    Log.Warning(error, "Entity Not Found Exception occurred {@LogProperties}", logProperties);
+                    break;
+                case UserNotFoundException:
+                    response.StatusCode = (int) HttpStatusCode.NotFound;
+                    Log.Warning(error, "User Not Found Exception occurred {@LogProperties}", logProperties);
                     break;
                 case ApiException:
                     response.StatusCode = (int) HttpStatusCode.BadRequest;

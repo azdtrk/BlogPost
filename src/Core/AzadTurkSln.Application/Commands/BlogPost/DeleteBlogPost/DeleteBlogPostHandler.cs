@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AzadTurkSln.Application.Commands.BlogPost.DeleteBlogPost
 {
-    public class DeleteBlogPostHandler : IRequestHandler<DeleteBlogPostRequest, ServiceResponse<DeleteBlogPostResponse>>
+    public class DeleteBlogPostHandler : IRequestHandler<DeleteBlogPostRequest, DeleteBlogPostResponse>
     {
         private readonly IBlogPostWriteRepository _blogPostWriteRepository;
         private readonly ILogger<DeleteBlogPostHandler> _logger;
@@ -22,7 +22,7 @@ namespace AzadTurkSln.Application.Commands.BlogPost.DeleteBlogPost
             _validator = validator;
         }
 
-        public async Task<ServiceResponse<DeleteBlogPostResponse>> Handle(DeleteBlogPostRequest request, CancellationToken cancellationToken)
+        public async Task<DeleteBlogPostResponse> Handle(DeleteBlogPostRequest request, CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(request, cancellationToken);
 
@@ -41,7 +41,7 @@ namespace AzadTurkSln.Application.Commands.BlogPost.DeleteBlogPost
                 Message = $"BlogPost with Id: {request.Id} has been deleted"
             };
 
-            return new ServiceResponse<DeleteBlogPostResponse>(response);
+            return response;
         }
     }
 }

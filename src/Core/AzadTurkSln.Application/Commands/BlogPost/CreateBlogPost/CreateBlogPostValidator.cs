@@ -2,9 +2,9 @@ using FluentValidation;
 
 namespace AzadTurkSln.Application.Commands.BlogPost.CreateBlogPost
 {
-    public class CreateBlogPostValidator : AbstractValidator<CreateBlogPostRequest>
+    public class LoginUserValidator : AbstractValidator<CreateBlogPostRequest>
     {
-        public CreateBlogPostValidator()
+        public LoginUserValidator()
         {
             RuleFor(x => x.Title).NotEmpty().MaximumLength(200);
 

@@ -31,7 +31,7 @@ namespace AzadTurkSln.Persistance.Repositories
             return entityEntry.State == EntityState.Deleted;
         }
 
-        public async Task<bool> RemoveAsync(int id)
+        public async Task<bool> RemoveAsync(Guid id)
         {
             T model = await Table.FirstOrDefaultAsync(data => data.Id == id);
             await _context.SaveChangesAsync();

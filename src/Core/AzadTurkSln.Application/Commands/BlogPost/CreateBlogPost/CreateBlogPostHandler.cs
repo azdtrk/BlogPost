@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using AzadTurkSln.Application.Exceptions;
 using AzadTurkSln.Application.Repositories;
-using AzadTurkSln.Application.Wrappers;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -9,7 +8,7 @@ using ValidationException = FluentValidation.ValidationException;
 
 namespace AzadTurkSln.Application.Commands.BlogPost.CreateBlogPost
 {
-    public class CreateBlogPostHandler : IRequestHandler<CreateBlogPostRequest, ServiceResponse<CreateBlogPostResponse>>
+    public class CreateBlogPostHandler : IRequestHandler<CreateBlogPostRequest, CreateBlogPostResponse>
     {
         private readonly IBlogPostWriteRepository _blogPostWriteRepository;
         private readonly IMapper _mapper;
@@ -29,7 +28,7 @@ namespace AzadTurkSln.Application.Commands.BlogPost.CreateBlogPost
             _validator = validator;
         }
 
-        public async Task<ServiceResponse<CreateBlogPostResponse>> Handle(CreateBlogPostRequest request, CancellationToken cancellationToken)
+        public async Task<CreateBlogPostResponse> Handle(CreateBlogPostRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -49,7 +48,7 @@ namespace AzadTurkSln.Application.Commands.BlogPost.CreateBlogPost
                 await _blogPostWriteRepository.AddAsync(blogPost);
 
                 var response = new CreateBlogPostResponse { CreatedDate = blogPost.DateCreated };
-                return new ServiceResponse<CreateBlogPostResponse>(response);
+                return response;
             }
             catch (Exception ex)
             {

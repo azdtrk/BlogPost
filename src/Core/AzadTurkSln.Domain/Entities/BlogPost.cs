@@ -18,14 +18,14 @@ namespace AzadTurkSln.Domain.Entities
 
         #region Navigation Properties
 
-        public int AuthorId { get; set; }
+        public Guid AuthorId { get; set; }
         public User Author { get; set; } = new User();
 
         public ICollection<Comment>? Comments { get; set; }
         
         public ICollection<Image>? Images { get; set; }
 
-        public int? ThumbnailImageId { get; set; }
+        public Guid? ThumbnailImageId { get; set; }
         public Image? ThumbnailImage { get; set; }
 
         #endregion

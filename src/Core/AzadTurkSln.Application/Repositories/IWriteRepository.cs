@@ -6,7 +6,7 @@ namespace AzadTurkSln.Application.Repositories
     {
         Task<bool> AddAsync(T model);
         bool Remove(T model);
-        Task<bool> RemoveAsync(int id);
+        Task<bool> RemoveAsync(Guid id);
         bool Update(T model);
     }
 }

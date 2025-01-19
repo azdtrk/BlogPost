@@ -3,8 +3,8 @@ using MediatR;
 
 namespace AzadTurkSln.Application.Queries.BlogPost.GetBlogPostById
 {
-    public class GetBlogPostByIdRequest : IRequest<ServiceResponse<GetBlogPostByIdResponse>>
+    public class GetBlogPostByIdRequest : IRequest<GetBlogPostByIdResponse>
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
     }
 }

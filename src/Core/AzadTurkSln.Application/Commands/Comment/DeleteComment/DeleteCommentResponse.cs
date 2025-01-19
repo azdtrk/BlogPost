@@ -1,7 +1,9 @@
-﻿namespace AzadTurkSln.Application.Commands.Comment.DeleteComment
+﻿using AzadTurkSln.Application.Wrappers;
+
+namespace AzadTurkSln.Application.Commands.Comment.DeleteComment
 {
-    public class DeleteCommentResponse
+    public class DeleteCommentResponse : ServiceResponse<string>
     {
-        public string Message { get; set; } = string.Empty;
+
     }
 }

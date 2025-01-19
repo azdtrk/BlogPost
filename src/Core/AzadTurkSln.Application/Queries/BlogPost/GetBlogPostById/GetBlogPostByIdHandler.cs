@@ -10,7 +10,7 @@ using ValidationException = FluentValidation.ValidationException;
 
 namespace AzadTurkSln.Application.Queries.BlogPost.GetBlogPostById
 {
-    public class GetBlogPostByIdHandler : IRequestHandler<GetBlogPostByIdRequest, ServiceResponse<GetBlogPostByIdResponse>>
+    public class GetBlogPostByIdHandler : IRequestHandler<GetBlogPostByIdRequest, GetBlogPostByIdResponse>
     {
         private readonly IBlogPostReadRepository _blogPostReadRpository;
         private readonly IMapper _mapper;
@@ -29,7 +29,7 @@ namespace AzadTurkSln.Application.Queries.BlogPost.GetBlogPostById
             _logger = logger;
         }
 
-        public async Task<ServiceResponse<GetBlogPostByIdResponse>> Handle(GetBlogPostByIdRequest request, CancellationToken cancellationToken)
+        public async Task<GetBlogPostByIdResponse> Handle(GetBlogPostByIdRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace AzadTurkSln.Application.Queries.BlogPost.GetBlogPostById
                 var blogPost = await _blogPostReadRpository.GetByIdAsync(request.Id);
 
                 if (blogPost == null)
-                    throw new NotFoundException(nameof(BlogPost), request.Id);
+                    throw new EntityNotFoundException(nameof(BlogPost), request.Id);
 
                 var blogPostDto = _mapper.Map<BlogPostSingleDto>(blogPost);
 
@@ -53,10 +53,10 @@ namespace AzadTurkSln.Application.Queries.BlogPost.GetBlogPostById
 
                 var response = new GetBlogPostByIdResponse()
                 {
-                    BlogPost = blogPostDto
+                    Value = blogPostDto
                 };
 
-                return new ServiceResponse<GetBlogPostByIdResponse>(response);
+                return response;
             }
             catch (Exception ex)
             {
