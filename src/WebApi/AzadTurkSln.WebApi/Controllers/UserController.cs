@@ -2,5 +2,11 @@
 {
     public class UserController : BaseController
     {
+
+        public UserController()
+        {
+
+        }
+
     }
 }
