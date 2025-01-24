@@ -1,28 +1,34 @@
 ﻿using AutoMapper;
-using AzadTurkSln.Application.Repositories;
+using AzadTurkSln.Application.Abstractions.Services;
+using AzadTurkSln.Application.DTOs.User;
 using MediatR;
 
 namespace AzadTurkSln.Application.Commands.User.UpdateUser
 {
     public class UpdateUserHandler : IRequestHandler<UpdateUserRequest, UpdateUserResponse>
     {
-        private readonly IUserWriteRepository _userWriteRepository;
-        private readonly IUserReadRepository _userReadRepository;
+        private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        public UpdateUserHandler(IUserWriteRepository userWriteRepository, IUserReadRepository userReadRepository, IMapper mapper)
+        public UpdateUserHandler(
+            IMapper mapper,
+            IUserService userService
+        )
         {
-            _userWriteRepository = userWriteRepository;
-            _userReadRepository = userReadRepository;
             _mapper = mapper;
+            _userService = userService;
         }
 
         public async Task<UpdateUserResponse> Handle(UpdateUserRequest request, CancellationToken cancellationToken)
         {
-            var userToBeUpdated = _userReadRepository.GetByIdAsync(request.Id);
-            var user = _mapper.Map<Domain.Entities.User>(userToBeUpdated);
-            _userWriteRepository.Update(user);
-            return new();
+            Domain.Entities.User userToBeUpdated = _mapper.Map<Domain.Entities.User>(request);
+            Domain.Entities.User updatedUser = await _userService.UpdateUserAsync(userToBeUpdated, userToBeUpdated.Id);
+
+            UpdateUserResponse response = new UpdateUserResponse
+            {
+                Value = _mapper.Map<UpdateUserDto>(updatedUser)
+            };
+            return response;
         }
     }
 }

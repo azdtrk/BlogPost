@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AzadTurkSln.Domain.Entities;
+using MediatR;
 
 namespace AzadTurkSln.Application.Commands.User.UpdateUser
 {
@@ -6,5 +7,6 @@ namespace AzadTurkSln.Application.Commands.User.UpdateUser
     {
         public Guid Id { get; set; }
         public string About { get; set; }
+        public Image ProfilePhoto { get; set; }
     }
 }

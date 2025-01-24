@@ -4,7 +4,9 @@ using AzadTurkSln.Application.Commands.User.RegisterUser;
 using AzadTurkSln.Application.DTOs;
 using AzadTurkSln.Application.DTOs.User;
 using AzadTurkSln.Application.Exceptions;
+using AzadTurkSln.Application.Repositories;
 using AzadTurkSln.Domain.Entities;
+using ETicaretAPI.Application.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,17 +18,22 @@ namespace AzadTurkSln.Persistance.Services
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly ITokenService _tokenService;
+        private readonly IEndpointReadRepository _endpointReadRepository;
+        private readonly IUserWriteRepository _userWriteRepository;
 
         public AuthService(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             RoleManager<IdentityRole> roleManager,
-            ITokenService tokenService)
+            ITokenService tokenService,
+            IEndpointReadRepository endpointReadRepository,
+            IUserWriteRepository userWriteRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
             _tokenService = tokenService;
+            _endpointReadRepository = endpointReadRepository;
         }
 
         public async Task<AuthenticatedUserDto> LoginAsync(LoginUserRequest loginUserRequest)
@@ -63,6 +70,16 @@ namespace AzadTurkSln.Persistance.Services
                 var errors = result.Errors.Select(e => e.Description);
                 throw new ApiException("Registration failed: " + string.Join(", ", errors));
             }
+
+            User domainUser = new User
+            {
+                ApplicationUserId = appUser.Id,
+                Email = registerUserRequest.Email,
+                Name = registerUserRequest.Name,
+                Password = registerUserRequest.Password
+            };
+
+            await _userWriteRepository.AddAsync(domainUser);
 
             if (!await _roleManager.RoleExistsAsync("Reader"))
             {
@@ -103,5 +120,45 @@ namespace AzadTurkSln.Persistance.Services
             };
         }
 
+        public async Task<bool> HasRolePermissionToEndpointAsync(string name, string code)
+        {
+            var userRoles = await GetRolesToUserAsync(name);
+
+            if (!userRoles.Any())
+                return false;
+
+            Endpoint? endpoint = await _endpointReadRepository.Table
+                     .Include(e => e.Roles)
+                     .FirstOrDefaultAsync(e => e.Code == code);
+
+            if (endpoint == null)
+                return false;
+
+            var hasRole = false;
+            var endpointRoles = endpoint.Roles.Select(r => r.Name);
+
+            foreach (var userRole in userRoles)
+            {
+                foreach (var endpointRole in endpointRoles)
+                    if (userRole == endpointRole)
+                        return true;
+            }
+
+            return false;
+        }
+
+        public async Task<string[]> GetRolesToUserAsync(string userIdOrName)
+        {
+            ApplicationUser user = await _userManager.FindByIdAsync(userIdOrName);
+            if (user == null)
+                user = await _userManager.FindByNameAsync(userIdOrName);
+
+            if (user != null)
+            {
+                var userRoles = await _userManager.GetRolesAsync(user);
+                return userRoles.ToArray();
+            }
+            return Array.Empty<string>();
+        }
     }
 }

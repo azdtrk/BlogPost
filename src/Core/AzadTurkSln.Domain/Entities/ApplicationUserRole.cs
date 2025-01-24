@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Net;
 
 namespace AzadTurkSln.Domain.Entities
 {
     public class ApplicationUserRole : IdentityRole<Guid>
     {
+        public ICollection<Endpoint> Endpoints { get; set; }
+
         public UserRole RoleType { get; set; }
 
         #region Navigation Property to DomainUser

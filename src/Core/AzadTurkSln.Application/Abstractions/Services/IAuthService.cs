@@ -9,5 +9,7 @@ namespace AzadTurkSln.Application.Abstractions.Services
         Task<AuthenticatedUserDto> LoginAsync(LoginUserRequest loginUserRequest);
         Task<AuthenticatedUserDto> RegisterAsync(RegisterUserRequest registerUserRequest);
         Task<AuthenticatedUserDto> RefreshTokenAsync(string refreshToken);
+        Task<string[]> GetRolesToUserAsync(string userIdOrName);
+        Task<bool> HasRolePermissionToEndpointAsync(string name, string code);
     }
 }
