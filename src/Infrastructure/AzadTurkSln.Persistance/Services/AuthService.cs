@@ -1,6 +1,6 @@
 ﻿using AzadTurkSln.Application.Abstractions.Services;
-using AzadTurkSln.Application.Commands.User.LoginUser;
-using AzadTurkSln.Application.Commands.User.RegisterUser;
+using AzadTurkSln.Application.CQRS.Commands.User.LoginUser;
+using AzadTurkSln.Application.CQRS.Commands.User.RegisterUser;
 using AzadTurkSln.Application.DTOs;
 using AzadTurkSln.Application.DTOs.User;
 using AzadTurkSln.Application.Exceptions;

@@ -1,4 +1,4 @@
-﻿using AzadTurkSln.Application.Commands.User.LoginUser;
+﻿using AzadTurkSln.Application.CQRS.Commands.User.LoginUser;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzadTurkSln.WebApi.Controllers
