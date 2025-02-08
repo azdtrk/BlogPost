@@ -1,5 +1,5 @@
-﻿using AzadTurkSln.Application.Commands.User.LoginUser;
-using AzadTurkSln.Application.Commands.User.RegisterUser;
+﻿using AzadTurkSln.Application.CQRS.Commands.User.LoginUser;
+using AzadTurkSln.Application.CQRS.Commands.User.RegisterUser;
 using AzadTurkSln.Application.DTOs.User;
 
 namespace AzadTurkSln.Application.Abstractions.Services

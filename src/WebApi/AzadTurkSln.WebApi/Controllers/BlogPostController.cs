@@ -1,7 +1,6 @@
-﻿using AzadTurkSln.Application.Commands.BlogPost.CreateBlogPost;
-using AzadTurkSln.Application.Queries.BlogPost.GelAllBlogPosts;
-using AzadTurkSln.Application.Queries.BlogPost.GetBlogPostById;
-using AzadTurkSln.Application.Wrappers;
+﻿using AzadTurkSln.Application.CQRS.Commands.BlogPost.CreateBlogPost;
+using AzadTurkSln.Application.CQRS.Queries.BlogPost.GelAllBlogPosts;
+using AzadTurkSln.Application.CQRS.Queries.BlogPost.GetBlogPostById;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
