@@ -1,0 +1,81 @@
+// Global Variables
+$border-radius: 8px;
+$shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+$background-grey: #f5f5f7;
+$white: #ffffff;
+$primary-blue: #007bff;
+$spacing-unit: 1rem;
+
+// Base container styles
+%card-container {
+  background-color: $white;
+  border-radius: $border-radius;
+  box-shadow: $shadow;
+  padding: $spacing-unit * 1.5;
+}
+
+// Form container styles
+%form-container {
+  @extend %card-container;
+  width: 100%;
+  max-width: 400px;
+  margin: 2rem auto;
+}
+
+// Form control styles
+%form-control-base {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: $border-radius;
+  font-size: 1rem;
+  
+  &:focus {
+    outline: none;
+    border-color: $primary-blue;
+    box-shadow: 0 0 0 2px rgba($primary-blue, 0.25);
+  }
+}
+
+// Global styles
+body {
+  background-color: $background-grey;
+  min-height: 100vh;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+  
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  
+  input, textarea {
+    @extend %form-control-base;
+  }
+}
+
+.btn {
+  border-radius: $border-radius;
+  padding: 0.75rem 1.5rem;
+  
+  &.btn-primary {
+    background-color: $primary-blue;
+    border: none;
+    width: 100%;
+    
+    &:hover {
+      background-color: darken($primary-blue, 10%);
+    }
+  }
+}
+
+// Content container styles
+.content-container {
+  @extend %card-container;
+  margin: 2rem auto;
+  max-width: 800px;
+} 

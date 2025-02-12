@@ -1,0 +1,44 @@
+<div class="container mt-4">
+  <div class="card shadow-sm rounded">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">Create New Blog Post</h3>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input 
+            type="text" 
+            class="form-control rounded" 
+            id="title"
+            formControlName="title"
+            placeholder="Enter post title">
+          <div *ngIf="postForm.get('title')?.touched && postForm.get('title')?.invalid" class="text-danger">
+            <small *ngIf="postForm.get('title')?.errors?.['required']">Title is required</small>
+            <small *ngIf="postForm.get('title')?.errors?.['minlength']">Title must be at least 3 characters</small>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="content" class="form-label">Content</label>
+          <quill-editor
+            formControlName="content"
+            [styles]="{ height: '300px' }"
+            [modules]="quillConfig">
+          </quill-editor>
+          <div *ngIf="postForm.get('content')?.touched && postForm.get('content')?.invalid" class="text-danger">
+            <small *ngIf="postForm.get('content')?.errors?.['required']">Content is required</small>
+            <small *ngIf="postForm.get('content')?.errors?.['minlength']">Content must be at least 10 characters</small>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button type="button" class="btn btn-secondary me-2 rounded" routerLink="/admin">Cancel</button>
+          <button type="submit" class="btn btn-primary rounded" [disabled]="postForm.invalid">
+            Publish Post
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div> 

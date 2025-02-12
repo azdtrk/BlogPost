@@ -1,0 +1,62 @@
+@import '../../../../../styles/global';
+
+.blog-post-container {
+  @extend %card-container;
+  margin: 2rem auto;
+  max-width: 800px;
+  
+  .blog-post-header {
+    margin-bottom: 2rem;
+    
+    .post-title {
+      margin-bottom: 0.5rem;
+    }
+    
+    .post-meta {
+      color: #6c757d;
+      
+      .post-author {
+        margin-left: 1rem;
+      }
+    }
+  }
+  
+  .blog-post-content {
+    margin-bottom: 2rem;
+  }
+  
+  .comments-section {
+    border-top: 1px solid #dee2e6;
+    padding-top: 2rem;
+    
+    .comment-form {
+      margin-bottom: 2rem;
+    }
+    
+    .comment-card {
+      @extend %card-container;
+      margin-bottom: 1rem;
+      
+      .comment-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        
+        .comment-author {
+          font-weight: 500;
+        }
+        
+        .comment-date {
+          color: #6c757d;
+        }
+      }
+    }
+  }
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+} 

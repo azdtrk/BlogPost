@@ -1,0 +1,40 @@
+@import '../../../../../styles/global';
+
+.auth-form {
+  @extend %form-container;
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group {
+    width: 100%;
+    
+    label {
+      width: 100%;
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    input {
+      width: 94%;
+    }
+  }
+  
+  .form-footer {
+    text-align: center;
+    margin-top: 1rem;
+    
+    a {
+      color: $primary-blue;
+      text-decoration: none;
+      cursor: pointer;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
