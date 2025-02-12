@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "AzadTurkSln.MainUI": {
+    "Blog.UI": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -23,7 +23,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/azad-turk-sln.main-ui",
+            "outputPath": "dist/blog.ui",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -37,7 +37,11 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/quill/dist/quill.core.css",
+              "node_modules/quill/dist/quill.bubble.css",
+              "node_modules/quill/dist/quill.snow.css",
+              "src/styles/global.scss"
             ],
             "scripts": []
           },
@@ -69,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "AzadTurkSln.MainUI:build:production"
+              "buildTarget": "Blog.UI:build:production"
             },
             "development": {
-              "buildTarget": "AzadTurkSln.MainUI:build:development"
+              "buildTarget": "Blog.UI:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -95,7 +99,10 @@
               }
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/quill/dist/quill.core.css",
+              "node_modules/quill/dist/quill.bubble.css",
+              "node_modules/quill/dist/quill.snow.css"
             ],
             "scripts": [],
             "karmaConfig": "karma.conf.js"

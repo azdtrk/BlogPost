@@ -1,0 +1,64 @@
+<div class="comments-container">
+  <div class="comments-header">
+    <h1>Manage Comments</h1>
+    <div class="search-box">
+      <input 
+        type="text" 
+        class="form-control" 
+        placeholder="Search comments..."
+        [(ngModel)]="searchTerm"
+        (input)="filterComments()">
+    </div>
+  </div>
+
+  <div class="comments-management">
+    <div class="card">
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Author</th>
+                <th>Content</th>
+                <th>Post</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let comment of filteredComments">
+                <td>{{ comment.author?.username }}</td>
+                <td class="comment-content">{{ comment.content }}</td>
+                <td>
+                  <a [routerLink]="['/post', comment.blogPostId]">
+                    View Post
+                  </a>
+                </td>
+                <td>{{ comment.createdAt | date:'medium' }}</td>
+                <td>
+                  <div class="action-buttons">
+                    <button class="btn btn-sm btn-danger" (click)="deleteComment(comment.id)">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="loading-spinner">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+
+        <!-- No Comments State -->
+        <div *ngIf="!isLoading && filteredComments.length === 0" class="no-comments">
+          <p>No comments found.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
