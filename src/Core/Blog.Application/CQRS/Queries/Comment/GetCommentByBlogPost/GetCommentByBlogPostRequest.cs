@@ -1,9 +1,9 @@
-﻿using Blog.Application.Wrappers;
-using MediatR;
+﻿using MediatR;
 
 namespace Blog.Application.CQRS.Queries.Comment.GetCommentByBlogPost
 {
-    public class GetCommentByBlogPostRequest : IRequest<ServiceResponse<GetCommentByBlogPostResponse>>
+    public class GetCommentByBlogPostRequest : IRequest<GetCommentByBlogPostResponse>
     {
+        public Guid BlogPostId { get; set; }
     }
 }

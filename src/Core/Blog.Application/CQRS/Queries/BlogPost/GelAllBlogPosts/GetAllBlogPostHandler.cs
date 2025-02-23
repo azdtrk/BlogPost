@@ -2,28 +2,47 @@
 using Blog.Application.DTOs.BlogPost;
 using Blog.Application.Exceptions;
 using Blog.Application.Repositories;
-using Blog.Application.Wrappers;
+using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using ValidationException = FluentValidation.ValidationException;
 
 namespace Blog.Application.CQRS.Queries.BlogPost.GelAllBlogPosts
 {
     public class GetAllBlogPostHandler : IRequestHandler<GetAllBlogPostRequest, GetAllBlogPostResponse>
     {
-        private readonly IBlogPostReadRepository _blogPostReadRpository;
+        private readonly IBlogPostReadRepository _blogPostReadRepository;
         private readonly IMapper _mapper;
+        private readonly IValidator<GetAllBlogPostRequest> _validator;
+        private readonly ILogger<GetAllBlogPostHandler> _logger;
 
-        public GetAllBlogPostHandler(IBlogPostReadRepository blogPostReadRpository, IMapper mapper)
+        public GetAllBlogPostHandler(
+            IBlogPostReadRepository blogPostReadRepository,
+            IMapper mapper,
+            IValidator<GetAllBlogPostRequest> validator,
+            ILogger<GetAllBlogPostHandler> logger
+        )
         {
-            _blogPostReadRpository = blogPostReadRpository;
+            _blogPostReadRepository = blogPostReadRepository;
             _mapper = mapper;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<GetAllBlogPostResponse> Handle(GetAllBlogPostRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                var blogPosts = _blogPostReadRpository.GetAll(false).Skip(request.Page * request.Size).Take(request.Size)
+                var validationResult = await _validator.ValidateAsync(request, cancellationToken);
+
+                if (!validationResult.IsValid)
+                {
+                    _logger.LogError("Get all blogpost validation failed: {Errors}", string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
+                    throw new ValidationException(validationResult.Errors);
+                }
+
+                var blogPosts = _blogPostReadRepository.GetAll(false).Skip(request.Page * request.Size).Take(request.Size)
                     .Include(bp => bp.ThumbnailImage)
                     .AsNoTracking()
                     .ToListAsync(cancellationToken);
@@ -37,7 +56,7 @@ namespace Blog.Application.CQRS.Queries.BlogPost.GelAllBlogPosts
                 {
                     Value = blogPostListDto
                 };
-                
+
                 return response;
             }
             catch (Exception ex)

@@ -1,5 +1,4 @@
-﻿using Blog.Application.Wrappers;
-using MediatR;
+﻿using MediatR;
 
 namespace Blog.Application.CQRS.Queries.BlogPost.GelAllBlogPosts
 {

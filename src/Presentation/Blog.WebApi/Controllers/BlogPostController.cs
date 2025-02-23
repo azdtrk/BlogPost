@@ -1,6 +1,10 @@
 ﻿using Blog.Application.CQRS.Commands.BlogPost.CreateBlogPost;
+using Blog.Application.CQRS.Commands.BlogPost.UpdateBlogPost;
 using Blog.Application.CQRS.Queries.BlogPost.GelAllBlogPosts;
 using Blog.Application.CQRS.Queries.BlogPost.GetBlogPostById;
+using Blog.Application.CustomAttributes;
+using Blog.Application.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -10,58 +14,37 @@ namespace Blog.WebApi.Controllers
     [ApiController]
     public class BlogPostController : BaseController
     {
-        private readonly ILogger<BlogPostController> _logger;
-
-        public BlogPostController(ILogger<BlogPostController> logger)
-        {
-            _logger = logger;
-        }
+        public BlogPostController() { }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = "Admin")]
+        [AuthorizeDefinition(ActionType = ActionType.Writing, Definition = "Create a blogpost")]
         public async Task<IActionResult> Post([FromBody] CreateBlogPostRequest createblogPostCommandRequest)
         {
-            try
-            {
-                await this.Mediator.Send(createblogPostCommandRequest);
-                return StatusCode((int)HttpStatusCode.Created);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An unexpected error occurred while creating blog post");
-                return StatusCode(500, "An unexpected error occurred while processing your request");
-            }
+            await Mediator.Send(createblogPostCommandRequest);
+            return StatusCode((int)HttpStatusCode.Created);
         }
 
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] GetAllBlogPostRequest getAllBlogPostQueryRequest)
         {
-            try
-            {
-                GetAllBlogPostResponse response = await this.Mediator.Send(getAllBlogPostQueryRequest);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An unexpected error occurred while getting blog posts");
-                return StatusCode(500, "An unexpected error occurred while processing your request");
-            }
+            GetAllBlogPostResponse response = await Mediator.Send(getAllBlogPostQueryRequest);
+            return Ok(response);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromQuery] GetBlogPostByIdRequest GetBlogPostByIdRequest)
         {
-            try
-            {
-                GetBlogPostByIdResponse response = await this.Mediator.Send(GetBlogPostByIdRequest);
-                return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An unexpected error occurred while getting the blog post");
-                return StatusCode(500, "An unexpected error occurred while processing your request");
-            }
+            GetBlogPostByIdResponse response = await Mediator.Send(GetBlogPostByIdRequest);
+            return Ok(response);
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update([FromQuery] UpdateBlogPostRequest updateBlogPostRequest)
+        {
+            UpdateBlogPostResponse response = await Mediator.Send(updateBlogPostRequest);
+            return Ok(response);
+        }
 
     }
 }

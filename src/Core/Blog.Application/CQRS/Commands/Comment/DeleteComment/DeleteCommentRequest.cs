@@ -1,5 +1,4 @@
-﻿using Blog.Application.Wrappers;
-using MediatR;
+﻿using MediatR;
 
 namespace Blog.Application.CQRS.Commands.Comment.DeleteComment
 {

@@ -2,7 +2,6 @@
 using Blog.Application.DTOs.Comment;
 using Blog.Application.Exceptions;
 using Blog.Application.Repositories;
-using Blog.Application.Wrappers;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;

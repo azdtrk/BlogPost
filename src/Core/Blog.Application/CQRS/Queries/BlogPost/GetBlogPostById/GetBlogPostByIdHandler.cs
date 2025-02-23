@@ -37,7 +37,8 @@ namespace Blog.Application.CQRS.Queries.BlogPost.GetBlogPostById
 
                 if (!validationResult.IsValid)
                 {
-                    _logger.LogError("Error detail: {Errors}", string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
+                    _logger.LogError("Get Blog Post by Id request validation failed: {Errors}",
+                        string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
                     throw new ValidationException(validationResult.Errors);
                 }
 

@@ -4,6 +4,8 @@ using Blog.Domain.Entities;
 using Blog.Persistance.Context;
 using Blog.Persistance.Repositories;
 using Blog.Persistance.Services;
+using ETicaretAPI.Application.Repositories;
+using ETicaretAPI.Persistence.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -18,6 +20,7 @@ namespace Blog.Persistance
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionString")));
 
+            #region Repositories
             services.AddScoped<IUserReadRepository, UserReadRepository>();
             services.AddScoped<IUserWriteRepository, UserWriteRepository>();
 
@@ -27,9 +30,17 @@ namespace Blog.Persistance
             services.AddScoped<IBlogPostReadRepository, BlogPostReadRepository>();
             services.AddScoped<IBlogPostWriteRepository, BlogPostWriteRepository>();
 
-            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IEndpointReadRepository, EndpointReadRepository>();
+            services.AddScoped<IEndpointWriteRepository, EndpointWriteRepository>();
+            #endregion
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            #region Services
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IUserService, UserService>();
+            #endregion
+
+            #region Identity Server Configurations
+            services.AddIdentity<ApplicationUser, ApplicationUserRole>(options =>
             {
                 options.Password.RequiredLength = 3;
                 options.Password.RequireNonAlphanumeric = false;
@@ -45,9 +56,10 @@ namespace Blog.Persistance
                 options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromSeconds(30);
 
             })
-            .AddRoles<IdentityRole>()
+            .AddRoles<ApplicationUserRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
+            #endregion
 
             return services;
         }

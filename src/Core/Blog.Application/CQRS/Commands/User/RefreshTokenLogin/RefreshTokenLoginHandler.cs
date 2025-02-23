@@ -14,7 +14,14 @@ namespace Blog.Application.CQRS.Commands.User.RefreshTokenLogin
 
         public async Task<RefreshTokenLoginResponse> Handle(RefreshTokenLoginRequest request, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            TokenDto tokenDto = await _authService.RefreshTokenLoginAsync(request.RefreshToken);
+
+            var response = new RefreshTokenLoginResponse()
+            {
+                Value = tokenDto
+            };
+
+            return response;
         }
     }
 }

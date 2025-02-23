@@ -1,21 +1,21 @@
 ﻿using Blog.Application.Abstractions.Services;
 using Blog.Application.CustomAttributes;
+using Blog.Application.Statics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Routing;
 using System.Reflection;
-using Blog.Application.Statics;
 
 namespace Blog.WebApi.Filters
 {
     public class RolePermissionFilter : IAsyncActionFilter
     {
-        readonly IAuthService _authService;
+        readonly IUserService _userService;
 
-        public RolePermissionFilter(IAuthService authService)
+        public RolePermissionFilter(IUserService userService)
         {
-            _authService = authService;
+            _userService = userService;
         }
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
@@ -30,7 +30,7 @@ namespace Blog.WebApi.Filters
 
                 var code = $"{(httpAttribute != null ? httpAttribute.HttpMethods.First() : HttpMethods.Get)}.{attribute.ActionType}.{attribute.Definition.Replace(" ", "")}";
 
-                var hasRole = await _authService.HasRolePermissionToEndpointAsync(name, code);
+                var hasRole = await _userService.HasRolePermissionToEndpointAsync(name, code);
 
                 if (!hasRole)
                     context.Result = new UnauthorizedResult();

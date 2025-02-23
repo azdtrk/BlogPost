@@ -2,7 +2,6 @@
 using Blog.Application.DTOs.BlogPost;
 using Blog.Application.Exceptions;
 using Blog.Application.Repositories;
-using Blog.Application.Wrappers;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -49,8 +48,8 @@ namespace Blog.Application.CQRS.Commands.BlogPost.UpdateBlogPost
             if (blogPostToBeUpdated == null)
                 throw new EntityNotFoundException(nameof(BlogPost), request.Id);
 
-            blogPostToBeUpdated.Title = request.Content;
-            blogPostToBeUpdated.Preface = request.Content;
+            blogPostToBeUpdated.Title = request.Title;
+            blogPostToBeUpdated.Preface = request.Preface;
             blogPostToBeUpdated.Content = request.Content;
             blogPostToBeUpdated.ThumbnailImage = request.ThumbNailImage;
             blogPostToBeUpdated.Images = request.Images;
@@ -65,7 +64,7 @@ namespace Blog.Application.CQRS.Commands.BlogPost.UpdateBlogPost
             };
 
             return response;
-
         }
+
     }
 }
