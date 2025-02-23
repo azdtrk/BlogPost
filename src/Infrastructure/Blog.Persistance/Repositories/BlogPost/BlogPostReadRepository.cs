@@ -7,5 +7,6 @@ namespace Blog.Persistance.Repositories
     public class BlogPostReadRepository : ReadRepository<BlogPost>, IBlogPostReadRepository
     {
         public BlogPostReadRepository(ApplicationDbContext context) : base(context) { }
+
     }
 }

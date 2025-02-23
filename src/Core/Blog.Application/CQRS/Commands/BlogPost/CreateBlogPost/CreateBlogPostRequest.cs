@@ -8,7 +8,7 @@ namespace Blog.Application.CQRS.Commands.BlogPost.CreateBlogPost
         public string Title { get; set; } = string.Empty;
         public string Content { get; set; } = string.Empty;
         public string Preface { get; set; } = string.Empty;
-        public ICollection<Image> Images { get; set; }
-        public Image ThumbNailImage { get; set; }
+        public ICollection<Image>? Images { get; set; }
+        public Image? ThumbNailImage { get; set; }
     }
 }

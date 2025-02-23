@@ -36,7 +36,8 @@ namespace Blog.Application.CQRS.Commands.BlogPost.CreateBlogPost
 
                 if (!validationResult.IsValid)
                 {
-                    _logger.LogError("Create blogpost validation failed: {Errors}", string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
+                    _logger.LogError("Create blogpost validation failed: {Errors}", 
+                        string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
                     throw new ValidationException(validationResult.Errors);
                 }
 
@@ -47,7 +48,11 @@ namespace Blog.Application.CQRS.Commands.BlogPost.CreateBlogPost
 
                 await _blogPostWriteRepository.AddAsync(blogPost);
 
-                var response = new CreateBlogPostResponse { CreatedDate = blogPost.DateCreated };
+                var response = new CreateBlogPostResponse
+                {
+                    Value = $"Blogpost '({request.Title})' has been created",
+                    CreatedDate = blogPost.DateCreated
+                };
                 return response;
             }
             catch (Exception ex)

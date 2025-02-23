@@ -2,6 +2,7 @@ using Blog.Application.Middleware;
 using Blog.Domain.Entities;
 using Blog.Infrastructure;
 using Blog.Persistance;
+using Blog.Persistance.Context;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -34,10 +35,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-{
-    // todo: validators for user credentials
-});
+builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
+    policy.WithOrigins("http://localhost:4200", "https://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowCredentials()
+));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer("Admin", options =>

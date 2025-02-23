@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Blog.Application.Exceptions;
 using Blog.Application.Repositories;
-using Blog.Application.Wrappers;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -9,7 +8,7 @@ using ValidationException = FluentValidation.ValidationException;
 
 namespace Blog.Application.CQRS.Commands.Comment.CreateComment
 {
-    public class CreateCommentHandler : IRequestHandler<CreateCommentRequest, ServiceResponse<CreateCommentResponse>>
+    public class CreateCommentHandler : IRequestHandler<CreateCommentRequest, CreateCommentResponse>
     {
         private readonly ICommentWriteRepository _commentWriteRepository;
         private readonly IMapper _mapper;
@@ -28,7 +27,7 @@ namespace Blog.Application.CQRS.Commands.Comment.CreateComment
             _validator = validator;
         }
 
-        public async Task<ServiceResponse<CreateCommentResponse>> Handle(CreateCommentRequest request, CancellationToken cancellationToken)
+        public async Task<CreateCommentResponse> Handle(CreateCommentRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -44,14 +43,18 @@ namespace Blog.Application.CQRS.Commands.Comment.CreateComment
 
                 var comment = _mapper.Map<Domain.Entities.Comment>(request);
 
-                // ToDo: Implement a better approach of handling the mapping errors!
+                // ToDo: Implement a better approach of handling the mapping errors
                 if (comment == null)
                     throw new MappingException();
 
                 await _commentWriteRepository.AddAsync(comment);
 
-                var response = new CreateCommentResponse { CreatedDate = comment.DateCreated };
-                return new ServiceResponse<CreateCommentResponse>(response);
+                var response = new CreateCommentResponse
+                {
+                    Value = "Comment has been received.",
+                    CreatedDate = comment.DateCreated
+                };
+                return response;
             }
             catch (Exception ex)
             {

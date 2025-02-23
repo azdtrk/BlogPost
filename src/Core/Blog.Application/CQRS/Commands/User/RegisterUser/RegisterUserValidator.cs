@@ -6,7 +6,7 @@ namespace Blog.Application.CQRS.Commands.User.RegisterUser
     {
         public RegisterUserValidator()
         {
-            RuleFor(u => u.Name)
+            RuleFor(u => u.UserName)
                 .NotNull()
                 .MinimumLength(5).WithMessage("{PropertyName} should at least be {MinLength} characters");
 

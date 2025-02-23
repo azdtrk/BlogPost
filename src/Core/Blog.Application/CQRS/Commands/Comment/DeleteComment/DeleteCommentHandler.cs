@@ -1,6 +1,5 @@
 ﻿using Blog.Application.Exceptions;
 using Blog.Application.Repositories;
-using Blog.Application.Wrappers;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -11,16 +10,19 @@ namespace Blog.Application.CQRS.Commands.Comment.DeleteComment
     public class DeleteCommentHandler : IRequestHandler<DeleteCommentRequest, DeleteCommentResponse>
     {
         private readonly ICommentWriteRepository _commentWriteRepository;
+        private readonly ICommentReadRepository _commentReadRepository;
         private readonly IValidator<DeleteCommentRequest> _validator;
         private readonly ILogger<DeleteCommentHandler> _logger;
 
         public DeleteCommentHandler(
             ICommentWriteRepository commentWriteRepository,
+            ICommentReadRepository commentReadRepository,
             IValidator<DeleteCommentRequest> validator,
             ILogger<DeleteCommentHandler> logger
         )
         {
             _commentWriteRepository = commentWriteRepository;
+            _commentReadRepository = commentReadRepository;
             _validator = validator;
             _logger = logger;
         }
@@ -39,11 +41,16 @@ namespace Blog.Application.CQRS.Commands.Comment.DeleteComment
                     throw new ValidationException(validationResult.Errors);
                 }
 
-                await _commentWriteRepository.RemoveAsync(request.Id);
+                var commentToBeDeleted = await _commentReadRepository.GetByIdAsync(request.Id);
+
+                if (commentToBeDeleted == null)
+                    throw new EntityNotFoundException(nameof(Comment), request.Id);
+
+                _commentWriteRepository.Remove(commentToBeDeleted);
 
                 var response = new DeleteCommentResponse()
                 {
-                    Message = $"Comment with Id: {request.Id} has been deleted"
+                    Value = $"Comment with Id: {request.Id} has been deleted"
                 };
 
                 return response;

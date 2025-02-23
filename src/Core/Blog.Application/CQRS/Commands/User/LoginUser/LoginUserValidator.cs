@@ -1,21 +1,17 @@
 using FluentValidation;
-using FluentValidation.Validators;
 
 namespace Blog.Application.CQRS.Commands.User.LoginUser
 {
-    public class RegisterUserValidator : AbstractValidator<LoginUserRequest>
+    public class LoginUserValidator : AbstractValidator<LoginUserRequest>
     {
-        public RegisterUserValidator()
+        public LoginUserValidator()
         {
-            
-            RuleFor(u => u.Email)
-                .NotNull()
-                .EmailAddress(FluentValidation.Validators.EmailValidationMode.AspNetCoreCompatible)
-                .WithMessage("{PropertyName} not a valid email address");
+            RuleFor(u => u.UserNameOrEmail)
+                .NotEmpty().WithMessage("{PropertyName} must be provided for your request to be processed");
 
             RuleFor(u => u.Password)
-                .NotNull()
-                .MinimumLength(5).WithMessage("{PropertyName} should at least be {MinLength} characters");
+                .NotEmpty()
+                .MinimumLength(8).WithMessage("{PropertyName} should at least be {MinLength} characters");
 
         }
     }
