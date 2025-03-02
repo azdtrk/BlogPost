@@ -29,7 +29,8 @@ namespace Blog.Application.CQRS.Queries.BlogPost.GetBlogPostById
             _logger = logger;
         }
 
-        public async Task<GetBlogPostByIdResponse> Handle(GetBlogPostByIdRequest request, CancellationToken cancellationToken)
+        public async Task<GetBlogPostByIdResponse> Handle(GetBlogPostByIdRequest request,
+            CancellationToken cancellationToken)
         {
             try
             {

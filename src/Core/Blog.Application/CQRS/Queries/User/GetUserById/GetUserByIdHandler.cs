@@ -37,7 +37,8 @@ namespace Blog.Application.CQRS.Queries.User.GetUserById
 
                 if (!validationResult.IsValid)
                 {
-                    _logger.LogError("Update password validation failed: {Errors}", string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
+                    _logger.LogError("Update password validation failed: {Errors}",
+                        string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
                     throw new ValidationException(validationResult.Errors);
                 }
 

@@ -9,7 +9,8 @@ using ValidationException = FluentValidation.ValidationException;
 
 namespace Blog.Application.CQRS.Queries.Comment.GetCommentByBlogPost
 {
-    public class GetCommentByBlogPostHandler : IRequestHandler<GetCommentByBlogPostRequest, GetCommentByBlogPostResponse>
+    public class
+        GetCommentByBlogPostHandler : IRequestHandler<GetCommentByBlogPostRequest, GetCommentByBlogPostResponse>
     {
         private readonly IBlogPostReadRepository _blogPostReadRepository;
         private readonly IMapper _mapper;
@@ -29,7 +30,8 @@ namespace Blog.Application.CQRS.Queries.Comment.GetCommentByBlogPost
             _logger = logger;
         }
 
-        public async Task<GetCommentByBlogPostResponse> Handle(GetCommentByBlogPostRequest request, CancellationToken cancellationToken)
+        public async Task<GetCommentByBlogPostResponse> Handle(GetCommentByBlogPostRequest request,
+            CancellationToken cancellationToken)
         {
             try
             {

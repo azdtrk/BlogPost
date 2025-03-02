@@ -31,7 +31,8 @@ namespace Blog.Application.CQRS.Queries.BlogPost.GelAllBlogPosts
             _logger = logger;
         }
 
-        public async Task<GetAllCommentsResponse> Handle(GetAllCommentsRequest request, CancellationToken cancellationToken)
+        public async Task<GetAllCommentsResponse> Handle(GetAllCommentsRequest request,
+            CancellationToken cancellationToken)
         {
             try
             {

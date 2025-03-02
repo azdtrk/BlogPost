@@ -30,7 +30,8 @@ namespace Blog.Application.CQRS.Queries.BlogPost.GelAllBlogPosts
             _logger = logger;
         }
 
-        public async Task<GetAllBlogPostResponse> Handle(GetAllBlogPostRequest request, CancellationToken cancellationToken)
+        public async Task<GetAllBlogPostResponse> Handle(GetAllBlogPostRequest request,
+            CancellationToken cancellationToken)
         {
             try
             {
@@ -38,11 +39,13 @@ namespace Blog.Application.CQRS.Queries.BlogPost.GelAllBlogPosts
 
                 if (!validationResult.IsValid)
                 {
-                    _logger.LogError("Get all blogpost validation failed: {Errors}", string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
+                    _logger.LogError("Get all blogpost validation failed: {Errors}",
+                        string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
                     throw new ValidationException(validationResult.Errors);
                 }
 
-                var blogPosts = _blogPostReadRepository.GetAll(false).Skip(request.Page * request.Size).Take(request.Size)
+                var blogPosts = _blogPostReadRepository.GetAll(false).Skip(request.Page * request.Size)
+                    .Take(request.Size)
                     .Include(bp => bp.ThumbnailImage)
                     .AsNoTracking()
                     .ToListAsync(cancellationToken);

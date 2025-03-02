@@ -27,7 +27,8 @@ namespace Blog.Application.CQRS.Commands.Comment.DeleteComment
             _logger = logger;
         }
 
-        public async Task<DeleteCommentResponse> Handle(DeleteCommentRequest request, CancellationToken cancellationToken)
+        public async Task<DeleteCommentResponse> Handle(DeleteCommentRequest request,
+            CancellationToken cancellationToken)
         {
             try
             {

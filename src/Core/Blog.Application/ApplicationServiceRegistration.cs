@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using FluentValidation;
+using MediatR;
+using Blog.Application.Behaviours;
 
 namespace Blog.Application
 {
@@ -10,7 +12,10 @@ namespace Blog.Application
         {
             var assembly = Assembly.GetExecutingAssembly();
 
-            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
+            services.AddMediatR(cfg => {
+                cfg.RegisterServicesFromAssembly(assembly);
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+            });
             services.AddAutoMapper(assembly);
             services.AddValidatorsFromAssembly(assembly);
 
