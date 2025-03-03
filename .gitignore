@@ -361,3 +361,13 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Docker secrets
+secrets/
+*.pwd
+*.key
+*.pem
+*.pfx
+**/appsettings.*.json
+!**/appsettings.Development.json
+!**/appsettings.Production.template.json

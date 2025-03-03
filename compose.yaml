@@ -7,20 +7,83 @@
 # You can add other services your application may depend on here, such as a
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
+
+version: '3.9'
+
 services:
-  server:
+  # SQL Server service
+  db:
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    container_name: blog_db
+    restart: always
+    secrets:
+      - db_password
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD_FILE=/run/secrets/db_password
+    ports:
+      - "1433:1433"
+    volumes:
+      - db-data:/var/opt/mssql
+    healthcheck:
+      test: [ "CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "$$(cat /run/secrets/db_password)", "-Q", "SELECT 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - blog-network
+
+  # ASP.NET Core API
+  api:
     build:
       context: .
-      target: final
+      dockerfile: Dockerfile
+      args:
+        - BUILD_CONFIGURATION=Release
+    container_name: blog_api
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnectionString=Server=db,1433;Database=MyBlogPostDb;User Id=sa;Password=$${DB_PASSWORD};TrustServerCertificate=true;
     ports:
-      - 8080:8080
+      - "8080:80"
+    secrets:
+      - db_password
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        export DB_PASSWORD=$$(cat /run/secrets/db_password)
+        # Replace the placeholder in appsettings.json with the actual password
+        sed -i "s/Gt3ClubSport2135/$$DB_PASSWORD/g" /app/appsettings.json
+        # Run migrations
+        dotnet Blog.WebApi.dll
+    networks:
+      - blog-network
+
+volumes:
+  db-data:
+    name: blog-db-data
+
+networks:
+  blog-network:
+    name: blog-network
+    driver: bridge
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt
 
 # The commented out section below is an example of how to define a PostgreSQL
-# database that your application can use. `depends_on` tells Docker Compose to
-# start the database before your application. The `db-data` volume persists the
-# database data between container restarts. The `db-password` secret is used
-# to set the database password. You must create `db/password.txt` and add
-# a password of your choosing to it before running `docker compose up`.
+# database that your application can use (In case if you want to use PostgreSQL instead of SQL Server). 
+# `depends_on` tells Docker Compose to start the database before your application.
+# The `db-data` volume persists the database data between container restarts.
+# The `db-password` secret is used to set the database password. 
+# You must create `db/password.txt` and add a password of your choosing to it
+# before running `docker compose up`.
 #     depends_on:
 #       db:
 #         condition: service_healthy

@@ -6,12 +6,19 @@ using Blog.Persistance.Context;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add support for Docker environment variables
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
 
 // Configure Serilog
 var logger = new LoggerConfiguration()
@@ -32,6 +39,11 @@ builder.Services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Handle connection string
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionString");
+Console.WriteLine($"Using connection string: {connectionString}");
+
+// Using our extension method to add persistence services - it handles the DbContext setup
 builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddInfrastructureServices();
 
@@ -65,6 +77,23 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+else
+{
+    // Production-specific settings
+    app.UseHsts();
+}
+
+// Apply migrations automatically in Docker environment
+if (Environment.GetEnvironmentVariable("DOTNET_RUNNING_IN_CONTAINER") == "true")
+{
+    Log.Information("Running in Docker, applying migrations automatically");
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        dbContext.Database.Migrate();
+        Log.Information("Migrations applied successfully");
+    }
 }
 
 app.UseHttpsRedirection();
