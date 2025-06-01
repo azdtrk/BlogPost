@@ -1,10 +1,9 @@
 ﻿using Blog.Application.Abstractions.Services;
-using Blog.Application.DTOs.User;
 using Blog.Application.Exceptions;
 using Blog.Application.Helpers;
-using Blog.Application.Repositories;
 using Blog.Domain.Entities;
-using ETicaretAPI.Application.Repositories;
+using Blog.Application.Repositories.User;
+using Blog.Application.Repositories.Endpoint;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,19 +13,16 @@ namespace Blog.Persistance.Services
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEndpointReadRepository _endpointReadRepository;
-        private readonly IUserWriteRepository _userWriteRepository;
         private readonly IUserReadRepository _userReadRepository;
 
         public UserService(
             UserManager<ApplicationUser> userManager,
             IEndpointReadRepository endpointReadRepository,
-            IUserWriteRepository userWriteRepository,
             IUserReadRepository userReadRepository
         )
         {
             _userManager = userManager;
             _endpointReadRepository = endpointReadRepository;
-            _userWriteRepository = userWriteRepository;
             _userReadRepository = userReadRepository;
         }
 
@@ -64,22 +60,6 @@ namespace Blog.Persistance.Services
             }
             else
                 throw new UserNotFoundException();
-        }
-
-        public async Task<User> UpdateUserAsync(User updateUserRequest, Guid Id)
-        {
-            var userToBeUpdated = await _userReadRepository.GetByIdAsync(Id);
-
-            if(userToBeUpdated == null)
-                throw new UserNotFoundException("User you want to update couldn't be found");
-
-            userToBeUpdated.About = updateUserRequest.About;
-            userToBeUpdated.ProfilePhoto = updateUserRequest.ProfilePhoto;
-            userToBeUpdated.Name = updateUserRequest.Name;
-
-            _userWriteRepository.Update(userToBeUpdated);
-
-            return userToBeUpdated;
         }
 
         public async Task<string[]> GetRolesToUserAsync(string userName)

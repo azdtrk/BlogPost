@@ -1,10 +1,9 @@
-﻿using Blog.Application.Repositories;
+﻿using Blog.Application.Repositories.User;
 using Blog.Persistance.Context;
-using Blog.Domain.Entities;
 
-namespace Blog.Persistance.Repositories
+namespace Blog.Persistance.Repositories.User
 {
-    public class UserReadRepository : ReadRepository<User>, IUserReadRepository
+    public class UserReadRepository : ReadRepository<Domain.Entities.User>, IUserReadRepository
     {
         public UserReadRepository(ApplicationDbContext context) : base(context) { }
     }

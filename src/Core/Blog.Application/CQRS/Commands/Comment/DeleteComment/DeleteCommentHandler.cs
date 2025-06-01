@@ -1,5 +1,5 @@
 ﻿using Blog.Application.Exceptions;
-using Blog.Application.Repositories;
+using Blog.Application.Repositories.Comment;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;

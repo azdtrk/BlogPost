@@ -1,5 +1,4 @@
 ﻿using Blog.Application.CQRS.Commands.User.UpdatePassword;
-using Blog.Application.CQRS.Commands.User.UpdateUser;
 using Blog.Application.CQRS.Queries.User.GetUserById;
 using Blog.Application.CustomAttributes;
 using Blog.Application.Enums;
@@ -9,25 +8,11 @@ using System.Net;
 
 namespace Blog.WebApi.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class UserController : BaseController
     {
-
-        private readonly ILogger<UserController> _logger;
-
-        public UserController(ILogger<UserController> logger)
-        {
-            _logger = logger;
-        }
-
-        [HttpPut("update-user")]
-        [Authorize(AuthenticationSchemes = "Admin")]
-        [AuthorizeDefinition(ActionType = ActionType.Writing, Definition = "Update user")]
-        public async Task<IActionResult> Put([FromBody] UpdateUserRequest updateUserRequest)
-        {
-            await this.Mediator.Send(updateUserRequest);
-            return StatusCode((int)HttpStatusCode.OK);
-        }
-
+        
         [HttpGet("get-user-by-Id")]
         [Authorize(AuthenticationSchemes = "Admin")]
         [AuthorizeDefinition(ActionType = ActionType.Writing, Definition = "Get one user by its Id")]
@@ -38,10 +23,13 @@ namespace Blog.WebApi.Controllers
         }
 
         [HttpPost("update-password")]
+        [Authorize(Roles = "Reader, Author")]
+        [AuthorizeDefinition(ActionType = ActionType.Writing, Definition = "Update password")]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordRequest updatePasswordRequest)
         {
             await this.Mediator.Send(updatePasswordRequest);
             return StatusCode((int)HttpStatusCode.OK);
         }
+        
     }
 }

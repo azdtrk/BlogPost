@@ -1,10 +1,9 @@
-﻿using Blog.Application.Repositories;
+﻿using Blog.Application.Repositories.User;
 using Blog.Persistance.Context;
-using Blog.Domain.Entities;
 
-namespace Blog.Persistance.Repositories
+namespace Blog.Persistance.Repositories.User
 {
-    public class UserWriteRepository : WriteRepository<User>, IUserWriteRepository
+    public class UserWriteRepository : WriteRepository<Domain.Entities.User>, IUserWriteRepository
     {
         public UserWriteRepository(ApplicationDbContext context) : base(context) { }
     }

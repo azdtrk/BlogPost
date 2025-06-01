@@ -1,11 +1,19 @@
 ﻿using Blog.Application.Abstractions.Services;
-using Blog.Application.Repositories;
 using Blog.Domain.Entities;
 using Blog.Persistance.Context;
-using Blog.Persistance.Repositories;
 using Blog.Persistance.Services;
-using ETicaretAPI.Application.Repositories;
-using ETicaretAPI.Persistence.Repositories;
+using Blog.Application.Repositories.User;
+using Blog.Application.Repositories.Comment;
+using Blog.Application.Repositories.BlogPost;
+using Blog.Application.Repositories.Endpoint;
+using Blog.Application.Repositories.Image;
+using Blog.Application.Repositories.Author;
+using Blog.Persistance.Repositories.BlogPost;
+using Blog.Persistance.Repositories.Comment;
+using Blog.Persistance.Repositories.Endpoint;
+using Blog.Persistance.Repositories.User;
+using Blog.Persistance.Repositories.Image;
+using Blog.Persistance.Repositories.Author;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -32,11 +40,37 @@ namespace Blog.Persistance
 
             services.AddScoped<IEndpointReadRepository, EndpointReadRepository>();
             services.AddScoped<IEndpointWriteRepository, EndpointWriteRepository>();
+
+            services.AddScoped<IImageReadRepository, ImageReadRepository>();
+            services.AddScoped<IImageWriteRepository, ImageWriteRepository>();
+
+            services.AddScoped<IAuthorReadRepository, AuthorReadRepository>();
+            services.AddScoped<IAuthorWriteRepository, AuthorWriteRepository>();
             #endregion
 
             #region Services
-            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IAuthService, AuthService>(sp =>
+            {
+                var userManager = sp.GetRequiredService<UserManager<ApplicationUser>>();
+                var signInManager = sp.GetRequiredService<SignInManager<ApplicationUser>>();
+                var roleManager = sp.GetRequiredService<RoleManager<ApplicationUserRole>>();
+                var tokenService = sp.GetRequiredService<ITokenService>();
+                var userService = sp.GetRequiredService<IUserService>();
+                var userWriteRepository = sp.GetRequiredService<IUserWriteRepository>();
+                var dbContext = sp.GetRequiredService<ApplicationDbContext>();
+                
+                return new AuthService(
+                    userManager,
+                    signInManager,
+                    roleManager,
+                    tokenService,
+                    userService,
+                    userWriteRepository,
+                    dbContext
+                );
+            });
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthorService, AuthorService>();
             #endregion
 
             #region Identity Server Configurations

@@ -1,0 +1,12 @@
+.main-content {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: calc(100vh - 65px); /* Account for navbar height */
+}
+
+.main-content.no-navbar {
+  min-height: 100vh;
+  padding: 0;
+  max-width: 100%;
+}

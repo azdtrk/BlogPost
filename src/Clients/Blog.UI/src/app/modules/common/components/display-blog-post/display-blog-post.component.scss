@@ -1,54 +1,289 @@
-@import '../../../../../styles/global';
+@use "../../../../../styles/global" as *;
 
 .blog-post-container {
-  @extend %card-container;
-  margin: 2rem auto;
-  max-width: 800px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 32px;
+  margin-bottom: 32px;
+}
+
+.blog-post-header {
+  margin-bottom: 24px;
   
-  .blog-post-header {
-    margin-bottom: 2rem;
+  .post-title {
+    font-size: 32px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+  
+  .post-meta {
+    color: #718096;
+    font-size: 16px;
     
-    .post-title {
-      margin-bottom: 0.5rem;
+    .post-author, .post-date {
+      margin-right: 16px;
+    }
+  }
+}
+
+.blog-post-image {
+  margin-bottom: 24px;
+  
+  .featured-image {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+}
+
+.blog-post-content {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #4a5568;
+  margin-bottom: 40px;
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: #2c3e50;
+    margin-top: 32px;
+    margin-bottom: 16px;
+  }
+  
+  p {
+    margin-bottom: 20px;
+  }
+  
+  img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 20px 0;
+  }
+  
+  a {
+    color: #0066cc;
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  ul, ol {
+    margin-bottom: 20px;
+    padding-left: 24px;
+    
+    li {
+      margin-bottom: 8px;
+    }
+  }
+  
+  blockquote {
+    border-left: 4px solid #0066cc;
+    padding-left: 20px;
+    font-style: italic;
+    margin: 20px 0;
+  }
+}
+
+.comments-section {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 32px;
+  
+  h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 24px;
+  }
+}
+
+.comment-form {
+  margin-bottom: 32px;
+  
+  .comment-input {
+    width: 100%;
+    padding: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    resize: vertical;
+    font-size: 16px;
+    margin-bottom: 16px;
+    
+    &:focus {
+      outline: none;
+      border-color: #0066cc;
+      box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+    }
+  }
+  
+  .submit-comment-btn {
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+      background-color: #0059b3;
     }
     
-    .post-meta {
-      color: #6c757d;
+    &:disabled {
+      background-color: #cbd5e0;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.login-to-comment, .no-comments {
+  background-color: #f7fafc;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  text-align: center;
+  color: #4a5568;
+  
+  a {
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: 500;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.comments-list {
+  .comment {
+    background-color: #f7fafc;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
       
-      .post-author {
-        margin-left: 1rem;
+      .comment-author {
+        font-weight: 600;
+        color: #2c3e50;
+      }
+      
+      .comment-date {
+        color: #718096;
+        font-size: 14px;
+      }
+    }
+    
+    .comment-content {
+      color: #4a5568;
+      line-height: 1.6;
+    }
+  }
+}
+
+.loading-state {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 600px;
+  
+  p {
+    font-size: 18px;
+    color: #4a5568;
+    margin-bottom: 20px;
+  }
+  
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100px;
+  }
+}
+
+.error-state {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 600px;
+  
+  h2 {
+    color: #e53e3e;
+    font-size: 24px;
+    margin-bottom: 16px;
+  }
+  
+  .error-message {
+    font-size: 18px;
+    color: #4a5568;
+    margin-bottom: 24px;
+    padding: 0 20px;
+  }
+  
+  .debug-info {
+    background-color: #f7fafc;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    text-align: left;
+    
+    p {
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #4a5568;
+      
+      strong {
+        color: #2c3e50;
       }
     }
   }
   
-  .blog-post-content {
-    margin-bottom: 2rem;
-  }
-  
-  .comments-section {
-    border-top: 1px solid #dee2e6;
-    padding-top: 2rem;
+  .error-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
     
-    .comment-form {
-      margin-bottom: 2rem;
+    .retry-btn, .back-btn {
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
     }
     
-    .comment-card {
-      @extend %card-container;
-      margin-bottom: 1rem;
+    .retry-btn {
+      background-color: #4299e1;
+      color: white;
+      border: none;
       
-      .comment-header {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 0.5rem;
-        
-        .comment-author {
-          font-weight: 500;
-        }
-        
-        .comment-date {
-          color: #6c757d;
-        }
+      &:hover {
+        background-color: #3182ce;
+      }
+    }
+    
+    .back-btn {
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      
+      &:hover {
+        background-color: #0059b3;
       }
     }
   }
@@ -59,4 +294,18 @@
   justify-content: center;
   align-items: center;
   min-height: 200px;
+}
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #0066cc;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 } 

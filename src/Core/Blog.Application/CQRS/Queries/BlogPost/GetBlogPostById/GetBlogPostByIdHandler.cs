@@ -1,32 +1,22 @@
 ﻿using AutoMapper;
 using Blog.Application.DTOs.BlogPost;
 using Blog.Application.Exceptions;
-using Blog.Application.Repositories;
-using Blog.Application.Wrappers;
-using FluentValidation;
+using Blog.Application.Repositories.BlogPost;
 using MediatR;
-using Microsoft.Extensions.Logging;
-using ValidationException = FluentValidation.ValidationException;
 
 namespace Blog.Application.CQRS.Queries.BlogPost.GetBlogPostById
 {
     public class GetBlogPostByIdHandler : IRequestHandler<GetBlogPostByIdRequest, GetBlogPostByIdResponse>
     {
-        private readonly IBlogPostReadRepository _blogPostReadRpository;
+        private readonly IBlogPostReadRepository _blogPostReadRepository;
         private readonly IMapper _mapper;
-        private readonly IValidator<GetBlogPostByIdRequest> _validator;
-        private readonly ILogger<GetBlogPostByIdHandler> _logger;
 
         public GetBlogPostByIdHandler(
             IBlogPostReadRepository blogPostReadRpository,
-            IMapper mapper,
-            IValidator<GetBlogPostByIdRequest> validator,
-            ILogger<GetBlogPostByIdHandler> logger)
+            IMapper mapper)
         {
-            _blogPostReadRpository = blogPostReadRpository;
+            _blogPostReadRepository = blogPostReadRpository;
             _mapper = mapper;
-            _validator = validator;
-            _logger = logger;
         }
 
         public async Task<GetBlogPostByIdResponse> Handle(GetBlogPostByIdRequest request,
@@ -34,16 +24,7 @@ namespace Blog.Application.CQRS.Queries.BlogPost.GetBlogPostById
         {
             try
             {
-                var validationResult = await _validator.ValidateAsync(request, cancellationToken);
-
-                if (!validationResult.IsValid)
-                {
-                    _logger.LogError("Get Blog Post by Id request validation failed: {Errors}",
-                        string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
-                    throw new ValidationException(validationResult.Errors);
-                }
-
-                var blogPost = await _blogPostReadRpository.GetByIdAsync(request.Id);
+                var blogPost = await _blogPostReadRepository.GetByIdAsync(request.Id);
 
                 if (blogPost == null)
                     throw new EntityNotFoundException(nameof(BlogPost), request.Id);

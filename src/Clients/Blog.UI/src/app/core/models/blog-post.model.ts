@@ -1,12 +1,24 @@
 import { User } from './user.model';
 
 export interface BlogPost {
-  id: number;
+  id?: string;
   title: string;
-  content: string;
-  dateCreated: Date;
+  Title?: string;
+  content?: string;
+  preface?: string;
+  Preface?: string;
+  dateCreated?: Date;
   comments?: Comment[];
-  author?: User;
+  author?: {
+    id: string;
+    username: string;
+  };
+  images?: Image[];
+  thumbNailImage?: {
+    id: string;
+    path: string;
+    fileName: string;
+  };
 }
 
 export interface Comment {
@@ -15,4 +27,10 @@ export interface Comment {
   userName: string;
   dateCreated: Date;
   blogPostId: number;
-} 
+}
+
+export interface Image {
+  id: string;
+  fileName: string;
+  path: string;
+}

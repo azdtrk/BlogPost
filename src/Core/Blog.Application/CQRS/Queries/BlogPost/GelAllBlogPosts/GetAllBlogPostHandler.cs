@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Blog.Application.DTOs.BlogPost;
 using Blog.Application.Exceptions;
-using Blog.Application.Repositories;
+using Blog.Application.Repositories.BlogPost;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -44,7 +44,22 @@ namespace Blog.Application.CQRS.Queries.BlogPost.GelAllBlogPosts
                     throw new ValidationException(validationResult.Errors);
                 }
 
-                var blogPosts = _blogPostReadRepository.GetAll(false).Skip(request.Page * request.Size)
+                var query = _blogPostReadRepository.GetAll(false);
+                
+                if (request.AuthorId.HasValue && request.AuthorId != Guid.Empty)
+                {
+                    // If viewing by author, show all their posts including drafts
+                    query = query.Where(bp => bp.AuthorId == request.AuthorId.Value);
+                }
+                else
+                {
+                    // Only return published posts to the public
+                    query = query.Where(bp => bp.CanBePublished == true);
+                }
+                
+                // Apply pagination and include necessary relationships
+                var blogPosts = await query
+                    .Skip(request.Page * request.Size)
                     .Take(request.Size)
                     .Include(bp => bp.ThumbnailImage)
                     .AsNoTracking()

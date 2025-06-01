@@ -1,9 +1,6 @@
-﻿using Blog.Application.Repositories;
-using Blog.Domain.Entities;
-
-namespace ETicaretAPI.Application.Repositories
+﻿namespace Blog.Application.Repositories.Endpoint
 {
-    public interface IEndpointReadRepository : IReadRepository<Endpoint>
+    public interface IEndpointReadRepository : IReadRepository<Domain.Entities.Endpoint>
     {
 
     }

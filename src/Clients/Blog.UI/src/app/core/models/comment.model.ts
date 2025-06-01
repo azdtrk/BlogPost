@@ -1,10 +1,10 @@
 import { User } from "./user.model";
 
 export interface Comment {
-  id: number;
+  id: string;
   content: string;
-  blogPostId: number;
-  authorId: number;
-  author: User;
-  createdAt: Date;
+  blogPostId: string;
+  authorId: string;
+  author?: User;
+  createdAt?: Date;
 }

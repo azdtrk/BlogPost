@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Blog.Application.DTOs.Comment;
 using Blog.Application.Exceptions;
-using Blog.Application.Repositories;
+using Blog.Application.Repositories.Comment;
 using MediatR;
 
 namespace Blog.Application.CQRS.Commands.Comment.UpdateComment

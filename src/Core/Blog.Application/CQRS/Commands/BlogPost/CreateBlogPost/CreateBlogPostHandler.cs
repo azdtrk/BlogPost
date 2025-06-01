@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Blog.Application.Exceptions;
-using Blog.Application.Repositories;
+using Blog.Application.Repositories.BlogPost;
 using MediatR;
 
 namespace Blog.Application.CQRS.Commands.BlogPost.CreateBlogPost

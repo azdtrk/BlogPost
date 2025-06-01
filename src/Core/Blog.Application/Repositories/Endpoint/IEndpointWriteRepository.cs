@@ -1,9 +1,7 @@
-﻿using Blog.Application.Repositories;
-using Blog.Domain.Entities;
-
-namespace ETicaretAPI.Application.Repositories
+﻿namespace Blog.Application.Repositories.Endpoint
 {
-    public interface IEndpointWriteRepository : IWriteRepository<Endpoint>
+    public interface IEndpointWriteRepository : IWriteRepository<Domain.Entities.Endpoint>
     {
+        
     }
 }

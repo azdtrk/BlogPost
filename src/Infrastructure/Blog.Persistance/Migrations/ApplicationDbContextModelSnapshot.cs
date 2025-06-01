@@ -50,7 +50,7 @@ namespace Blog.Persistance.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("DomainUserId")
+                    b.Property<Guid?>("DomainUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
@@ -101,6 +101,10 @@ namespace Blog.Persistance.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DomainUserId")
+                        .IsUnique()
+                        .HasFilter("[DomainUserId] IS NOT NULL");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -122,7 +126,7 @@ namespace Blog.Persistance.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("DomainUserId")
+                    b.Property<Guid?>("DomainUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -137,6 +141,10 @@ namespace Blog.Persistance.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DomainUserId")
+                        .IsUnique()
+                        .HasFilter("[DomainUserId] IS NOT NULL");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
@@ -176,7 +184,8 @@ namespace Blog.Persistance.Migrations
 
                     b.Property<string>("Preface")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<Guid?>("ThumbnailImageId")
                         .HasColumnType("uniqueidentifier");
@@ -188,10 +197,6 @@ namespace Blog.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
-
-                    b.HasIndex("ThumbnailImageId")
-                        .IsUnique()
-                        .HasFilter("[ThumbnailImageId] IS NOT NULL");
 
                     b.ToTable("BlogPosts");
                 });
@@ -259,7 +264,7 @@ namespace Blog.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Endpoint");
+                    b.ToTable("Endpoints");
                 });
 
             modelBuilder.Entity("Blog.Domain.Entities.ExceptionLog", b =>
@@ -308,8 +313,15 @@ namespace Blog.Persistance.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("BlogPostId")
+                    b.Property<Guid?>("AuthorId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("BlogPostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
@@ -318,20 +330,45 @@ namespace Blog.Persistance.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Height")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsThumbnail")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("OriginalFileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Size")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Storage")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid?>("ThumbnailForBlogPostId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Width")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("BlogPostId");
+
+                    b.HasIndex("ThumbnailForBlogPostId")
+                        .IsUnique()
+                        .HasFilter("[ThumbnailForBlogPostId] IS NOT NULL");
 
                     b.ToTable("Images");
                 });
@@ -341,9 +378,6 @@ namespace Blog.Persistance.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("About")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ApplicationUserId")
                         .HasColumnType("uniqueidentifier");
@@ -364,31 +398,31 @@ namespace Blog.Persistance.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
-
                     b.Property<string>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("ProfilePhotoId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId")
-                        .IsUnique();
-
-                    b.HasIndex("ApplicationUserRoleId")
-                        .IsUnique();
-
-                    b.HasIndex("ProfilePhotoId")
-                        .IsUnique()
-                        .HasFilter("[ProfilePhotoId] IS NOT NULL");
-
                     b.ToTable("DomainUsers");
+
+                    b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("BlogPostReader", b =>
+                {
+                    b.Property<Guid>("ReaderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SavedPostsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ReaderId", "SavedPostsId");
+
+                    b.HasIndex("SavedPostsId");
+
+                    b.ToTable("ReaderSavedPosts", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -537,6 +571,43 @@ namespace Blog.Persistance.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Blog.Domain.Entities.Author", b =>
+                {
+                    b.HasBaseType("Blog.Domain.Entities.User");
+
+                    b.Property<string>("About")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("ProfilePhotoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("ProfilePhotoId")
+                        .IsUnique()
+                        .HasFilter("[ProfilePhotoId] IS NOT NULL");
+
+                    b.ToTable("Authors", (string)null);
+                });
+
+            modelBuilder.Entity("Blog.Domain.Entities.Reader", b =>
+                {
+                    b.HasBaseType("Blog.Domain.Entities.User");
+
+                    b.Property<DateTime>("LastLoginDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
+                    b.Property<string>("Preferences")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("ReceiveNotifications")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.ToTable("Readers", (string)null);
+                });
+
             modelBuilder.Entity("ApplicationUserRoleEndpoint", b =>
                 {
                     b.HasOne("Blog.Domain.Entities.Endpoint", null)
@@ -552,22 +623,35 @@ namespace Blog.Persistance.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Blog.Domain.Entities.ApplicationUser", b =>
+                {
+                    b.HasOne("Blog.Domain.Entities.User", "DomainUser")
+                        .WithOne("ApplicationUser")
+                        .HasForeignKey("Blog.Domain.Entities.ApplicationUser", "DomainUserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("DomainUser");
+                });
+
+            modelBuilder.Entity("Blog.Domain.Entities.ApplicationUserRole", b =>
+                {
+                    b.HasOne("Blog.Domain.Entities.User", "DomainUser")
+                        .WithOne("ApplicationUserRole")
+                        .HasForeignKey("Blog.Domain.Entities.ApplicationUserRole", "DomainUserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("DomainUser");
+                });
+
             modelBuilder.Entity("Blog.Domain.Entities.BlogPost", b =>
                 {
-                    b.HasOne("Blog.Domain.Entities.User", "Author")
+                    b.HasOne("Blog.Domain.Entities.Author", "Author")
                         .WithMany("BlogPosts")
                         .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Blog.Domain.Entities.Image", "ThumbnailImage")
-                        .WithOne("ThumbnailForBlogPost")
-                        .HasForeignKey("Blog.Domain.Entities.BlogPost", "ThumbnailImageId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.Navigation("Author");
-
-                    b.Navigation("ThumbnailImage");
                 });
 
             modelBuilder.Entity("Blog.Domain.Entities.Comment", b =>
@@ -601,34 +685,31 @@ namespace Blog.Persistance.Migrations
                     b.HasOne("Blog.Domain.Entities.BlogPost", "BlogPost")
                         .WithMany("Images")
                         .HasForeignKey("BlogPostId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Blog.Domain.Entities.BlogPost", "ThumbnailForBlogPost")
+                        .WithOne("ThumbnailImage")
+                        .HasForeignKey("Blog.Domain.Entities.Image", "ThumbnailForBlogPostId")
+                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.Navigation("BlogPost");
+
+                    b.Navigation("ThumbnailForBlogPost");
                 });
 
-            modelBuilder.Entity("Blog.Domain.Entities.User", b =>
+            modelBuilder.Entity("BlogPostReader", b =>
                 {
-                    b.HasOne("Blog.Domain.Entities.ApplicationUser", "ApplicationUser")
-                        .WithOne("DomainUser")
-                        .HasForeignKey("Blog.Domain.Entities.User", "ApplicationUserId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                    b.HasOne("Blog.Domain.Entities.Reader", null)
+                        .WithMany()
+                        .HasForeignKey("ReaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("Blog.Domain.Entities.ApplicationUserRole", "ApplicationUserRole")
-                        .WithOne("DomainUser")
-                        .HasForeignKey("Blog.Domain.Entities.User", "ApplicationUserRoleId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("Blog.Domain.Entities.Image", "ProfilePhoto")
-                        .WithOne("User")
-                        .HasForeignKey("Blog.Domain.Entities.User", "ProfilePhotoId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("ApplicationUserRole");
-
-                    b.Navigation("ProfilePhoto");
+                    b.HasOne("Blog.Domain.Entities.BlogPost", null)
+                        .WithMany()
+                        .HasForeignKey("SavedPostsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -682,14 +763,29 @@ namespace Blog.Persistance.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Blog.Domain.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("Blog.Domain.Entities.Author", b =>
                 {
-                    b.Navigation("DomainUser");
+                    b.HasOne("Blog.Domain.Entities.User", null)
+                        .WithOne()
+                        .HasForeignKey("Blog.Domain.Entities.Author", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Blog.Domain.Entities.Image", "ProfilePhoto")
+                        .WithOne("Author")
+                        .HasForeignKey("Blog.Domain.Entities.Author", "ProfilePhotoId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("ProfilePhoto");
                 });
 
-            modelBuilder.Entity("Blog.Domain.Entities.ApplicationUserRole", b =>
+            modelBuilder.Entity("Blog.Domain.Entities.Reader", b =>
                 {
-                    b.Navigation("DomainUser");
+                    b.HasOne("Blog.Domain.Entities.User", null)
+                        .WithOne()
+                        .HasForeignKey("Blog.Domain.Entities.Reader", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Blog.Domain.Entities.BlogPost", b =>
@@ -697,6 +793,8 @@ namespace Blog.Persistance.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Images");
+
+                    b.Navigation("ThumbnailImage");
                 });
 
             modelBuilder.Entity("Blog.Domain.Entities.Comment", b =>
@@ -706,16 +804,21 @@ namespace Blog.Persistance.Migrations
 
             modelBuilder.Entity("Blog.Domain.Entities.Image", b =>
                 {
-                    b.Navigation("ThumbnailForBlogPost");
-
-                    b.Navigation("User");
+                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("Blog.Domain.Entities.User", b =>
                 {
-                    b.Navigation("BlogPosts");
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("ApplicationUserRole");
 
                     b.Navigation("Comments");
+                });
+
+            modelBuilder.Entity("Blog.Domain.Entities.Author", b =>
+                {
+                    b.Navigation("BlogPosts");
                 });
 #pragma warning restore 612, 618
         }

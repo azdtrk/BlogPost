@@ -1,10 +1,9 @@
-﻿using Blog.Application.Repositories;
+﻿using Blog.Application.Repositories.Comment;
 using Blog.Persistance.Context;
-using Blog.Domain.Entities;
 
-namespace Blog.Persistance.Repositories
+namespace Blog.Persistance.Repositories.Comment
 {
-    public class CommentWriteRepository : WriteRepository<Comment>, ICommentWriteRepository
+    public class CommentWriteRepository : WriteRepository<Domain.Entities.Comment>, ICommentWriteRepository
     {
         public CommentWriteRepository(ApplicationDbContext context) : base(context) { }
     }

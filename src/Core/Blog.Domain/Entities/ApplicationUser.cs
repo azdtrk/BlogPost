@@ -8,9 +8,7 @@ namespace Blog.Domain.Entities
         public DateTime? RefreshTokenEndDate { get; set; }
 
         #region Navigation Property to DomainUser
-
-        public Guid DomainUserId { get; set; }
-
+        public Guid? DomainUserId { get; set; }
         public User? DomainUser { get; set; }
         #endregion
     }

@@ -1,8 +1,6 @@
-﻿using Blog.Domain.Entities;
-
-namespace Blog.Application.Repositories
+﻿namespace Blog.Application.Repositories.BlogPost
 {
-    public interface IBlogPostWriteRepository : IWriteRepository<BlogPost>
+    public interface IBlogPostWriteRepository : IWriteRepository<Domain.Entities.BlogPost>
     {
 
     }

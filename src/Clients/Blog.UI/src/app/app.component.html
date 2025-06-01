@@ -1,1 +1,4 @@
-<router-outlet />
+<app-navbar *ngIf="!isLoginPage"></app-navbar>
+<main class="main-content" [ngClass]="{'no-navbar': isLoginPage}">
+  <router-outlet></router-outlet>
+</main>

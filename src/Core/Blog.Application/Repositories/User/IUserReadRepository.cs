@@ -1,8 +1,6 @@
-﻿using Blog.Domain.Entities;
-
-namespace Blog.Application.Repositories
+﻿namespace Blog.Application.Repositories.User
 {
-    public interface IUserReadRepository : IReadRepository<User>
+    public interface IUserReadRepository : IReadRepository<Domain.Entities.User>
     {
 
     }

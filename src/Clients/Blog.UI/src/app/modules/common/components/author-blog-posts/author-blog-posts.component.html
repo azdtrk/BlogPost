@@ -1,0 +1,27 @@
+<div class="author-blog-posts">
+  <div class="container">
+    <h1 class="page-title" *ngIf="authorName">Posts by {{ authorName }}</h1>
+    <h1 class="page-title" *ngIf="!authorName">Author Posts</h1>
+    
+    <div *ngIf="isLoading" class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading blog posts...</p>
+    </div>
+    
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+    
+    <div *ngIf="!isLoading && !errorMessage">
+      <div *ngIf="blogPosts.length === 0" class="no-posts-message">
+        <p>This author has not published any blog posts yet.</p>
+      </div>
+      
+      <app-display-blog-post-list 
+        *ngIf="blogPosts.length > 0"
+        [blogPosts]="blogPosts"
+        (pageChange)="onPageChange($event)">
+      </app-display-blog-post-list>
+    </div>
+  </div>
+</div> 

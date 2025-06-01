@@ -1,1 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+}
+
+/* App wrapper - handles full width */
+.app-wrapper {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Main content area */
+.main-content {
+  width: 100%;
+  min-height: calc(100vh - 60px);
+}
+
+/* Common container for consistent width */
+.equal-width-container {
+  width: 100%;
+  max-width: calc(280px * 4 + 72px); /* 4 cards (280px each) + 3 gaps (24px each) */
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+  /* border: 1px solid red; */ /* Uncomment to debug */
+}
+
+/* Reset default browser styles */
+* {
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin-top: 0;
+}
+
+/* Debug grid alignment */
+.blog-posts-grid {
+  /* border: 1px solid blue; */ /* Uncomment to debug */
+}

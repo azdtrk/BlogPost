@@ -1,0 +1,16 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <a [routerLink]="['/blog']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Azad Türk | Blog</a>
+    </div>
+    <div class="navbar-links">
+      <a [routerLink]="['/admin/create']" routerLinkActive="active" *ngIf="isLoggedIn() && isAdmin">Create Post</a>
+    </div>
+    <div class="navbar-auth">
+      <a [routerLink]="['/admin']" *ngIf="isLoggedIn() && isAdmin"><span class="username">{{ username }}</span></a>
+      <span class="username" *ngIf="isLoggedIn() && !isAdmin">{{ username }}</span>
+      <button class="logout-btn" *ngIf="isLoggedIn()" (click)="logout()">Logout</button>
+      <a [routerLink]="['/login']" *ngIf="!isLoggedIn()">Login</a>
+    </div>
+  </div>
+</nav>

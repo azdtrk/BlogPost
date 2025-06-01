@@ -31,21 +31,18 @@ export class ManageCommentsComponent implements OnInit {
     }
 
     const searchTermLower = this.searchTerm.toLowerCase();
-    this.filteredComments = this.comments.filter(comment => 
+    this.filteredComments = this.comments.filter(comment =>
       comment.content.toLowerCase().includes(searchTermLower) ||
       comment.author?.username.toLowerCase().includes(searchTermLower)
     );
   }
 
-  deleteComment(commentId: number): void {
+  deleteComment(commentId: string): void {
     if (confirm('Are you sure you want to delete this comment?')) {
       this.commentService.delete(commentId).subscribe({
         next: () => {
           this.comments = this.comments.filter(comment => comment.id !== commentId);
           this.filterComments();
-        },
-        error: (error) => {
-          console.error('Error deleting comment:', error);
         }
       });
     }
@@ -60,9 +57,8 @@ export class ManageCommentsComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Error loading comments:', error);
         this.isLoading = false;
       }
     });
   }
-} 
+}

@@ -14,34 +14,17 @@ import { DisplayBlogPostListComponent } from '../../../common/components/display
   imports: [CommonModule, DisplayBlogPostListComponent]
 })
 export class UserDashboardComponent implements OnInit {
-  recentPosts: BlogPost[] = [];
   isLoading = false;
 
   constructor(
-    private blogPostService: BlogPostService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.loadRecentPosts();
+
   }
 
   viewPost(postId: number): void {
     this.router.navigate(['/post', postId]);
   }
-
-  private loadRecentPosts(): void {
-    this.isLoading = true;
-    this.blogPostService.getAll()
-      .subscribe({
-        next: (posts) => {
-          this.recentPosts = posts;
-          this.isLoading = false;
-        },
-        error: (error) => {
-          console.error('Error loading posts:', error);
-          this.isLoading = false;
-        }
-      });
-  }
-} 
+}

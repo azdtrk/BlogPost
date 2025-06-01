@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Blog.Application.DTOs.Comment;
 using Blog.Application.Exceptions;
-using Blog.Application.Repositories;
+using Blog.Application.Repositories.BlogPost;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -9,8 +9,7 @@ using ValidationException = FluentValidation.ValidationException;
 
 namespace Blog.Application.CQRS.Queries.Comment.GetCommentByBlogPost
 {
-    public class
-        GetCommentByBlogPostHandler : IRequestHandler<GetCommentByBlogPostRequest, GetCommentByBlogPostResponse>
+    public class GetCommentByBlogPostHandler : IRequestHandler<GetCommentByBlogPostRequest, GetCommentByBlogPostResponse>
     {
         private readonly IBlogPostReadRepository _blogPostReadRepository;
         private readonly IMapper _mapper;

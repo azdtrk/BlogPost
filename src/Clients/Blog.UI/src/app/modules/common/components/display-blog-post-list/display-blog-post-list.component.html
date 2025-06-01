@@ -1,13 +1,7 @@
-<div class="blog-posts-container">
+<div class="blog-post-container">
   <!-- Loading State -->
   <div *ngIf="isLoading" class="loading-state">
     <p>Loading blog posts...</p>
-  </div>
-
-  <!-- Error State -->
-  <div *ngIf="error" class="error-state">
-    <p>{{ error }}</p>
-    <button (click)="loadBlogPosts()" class="retry-btn">Retry</button>
   </div>
 
   <!-- Empty State -->
@@ -15,29 +9,46 @@
     <p>No blog posts available.</p>
   </div>
 
-  <!-- Blog Posts List -->
-  <div *ngIf="!isLoading && !error && blogPosts.length > 0">
+  <!-- Blog Posts Grid Layout -->
+  <div *ngIf="!isLoading && !error && blogPosts.length > 0" class="blog-posts-grid">
     <div *ngFor="let post of blogPosts" class="blog-post-card">
-      <h2>{{ post.title }}</h2>
-      <p class="post-meta">By {{ post.author }} on {{ post.dateCreated | date }}</p>
-      <div class="post-content">
-        {{ post.content }}
+      <div class="thumbnail-container" (click)="navigateByTitleAndId(post)">
+        <img
+          [src]="post.thumbNailImage?.path || defaultThumbnailPath"
+          [alt]="post.title"
+          class="post-thumbnail"
+          (error)="handleImageError($event)"
+          (load)="handleImageLoad($event)"
+          loading="lazy">
       </div>
-
-      <div class="comments-section">
-        <h3>Comments</h3>
-        <div *ngFor="let comment of post.comments" class="comment">
-          <p>{{ comment.content }}</p>
-          <small>By {{ comment.userName }} on {{ comment.dateCreated | date }}</small>
+      <div class="post-info" (click)="navigateByTitleAndId(post)">
+        <h3 class="post-title">{{ post.title || 'No Title' }}</h3>
+        <p class="post-preface">{{ post.preface || 'No description available' }}</p>
+        <div class="post-meta">
+          <span class="post-author" *ngIf="post.author">{{ post.author.username }}</span>
+          <span class="post-date" *ngIf="post.dateCreated">{{ post.dateCreated | date }}</span>
         </div>
-
-        <div *ngIf="isLoggedIn()" class="comment-form">
-          <form [formGroup]="commentForm" (ngSubmit)="submitComment(post.id)">
-            <textarea formControlName="content" placeholder="Write a comment..." class="comment-input"></textarea>
-            <button type="submit" [disabled]="!commentForm.valid" class="submit-comment-btn">Submit Comment</button>
-          </form>
-        </div>
+      </div>
+      <div class="read-more">
+        <button class="read-more-btn" (click)="navigateByTitleAndId(post)">Read More</button>
       </div>
     </div>
   </div>
-</div> 
+
+  <!-- Pagination -->
+  <div *ngIf="!isLoading && !error && blogPosts.length > 0" class="pagination-controls">
+    <button
+      (click)="loadPreviousPage()"
+      [disabled]="currentPage === 0 || isLoading"
+      class="pagination-btn">
+      <
+    </button>
+    <span class="page-info">{{ currentPage + 1 }}</span>
+    <button
+      (click)="loadNextPage()"
+      [disabled]="blogPosts.length < pageSize || isLoading"
+      class="pagination-btn">
+      >
+    </button>
+  </div>
+</div>

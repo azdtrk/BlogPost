@@ -43,7 +43,7 @@
 
         &.ng-invalid.ng-touched {
           border-color: #dc3545;
-          
+
           &:focus {
             box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
           }
@@ -70,7 +70,7 @@
         .ql-editor {
           font-size: 1rem;
           line-height: 1.6;
-          
+
           &.ql-blank::before {
             color: #6c757d;
             font-style: normal;
@@ -127,7 +127,7 @@
 @media (max-width: 768px) {
   .container {
     margin: 1rem auto;
-    
+
     .card {
       .card-body {
         padding: 1.5rem;
@@ -155,4 +155,285 @@
     border-color: #f5c6cb;
     color: #721c24;
   }
-} 
+}
+
+/* Custom styling for form inputs to ensure consistent width */
+.medium-style-input {
+  position: relative;
+  margin-bottom: 1.5rem;
+  width: 100%;
+  /* padding now defined in common styles */
+  box-sizing: border-box;
+
+  .input-container {
+    position: relative;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .medium-title-input {
+    width: 100%;
+    font-size: 1.75rem;
+    font-weight: 700;
+    padding: 0.75rem 0;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: none;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+
+    &:focus {
+      box-shadow: none;
+      border-color: #007bff;
+      outline: none;
+    }
+  }
+
+  .medium-preface-input {
+    width: 100%;
+    font-size: 1.25rem;
+    padding: 0.75rem 0;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #e0e0e0;
+    box-shadow: none;
+    transition: border-color 0.3s;
+    resize: vertical;
+    min-height: 80px;
+    box-sizing: border-box;
+
+    &:focus {
+      box-shadow: none;
+      border-color: #007bff;
+      outline: none;
+    }
+  }
+
+  .floating-label {
+    position: absolute;
+    left: 10px; /* Match the padding of the container */
+    color: #6c757d;
+    font-size: 1.25rem;
+    pointer-events: none;
+    transition: all 0.2s ease;
+    /* Center the label vertically within the input */
+    top: 50%;
+    transform: translateY(-50%);
+    
+    &.preface-label {
+      top: 40px;
+      transform: none;
+    }
+
+    &.filled,
+    .medium-title-input:focus ~ &,
+    .medium-preface-input:focus ~ & {
+      top: -1.25rem;
+      transform: none;
+      font-size: 0.875rem;
+      color: #6c757d;
+    }
+  }
+}
+
+/* Fix for form element width calculations */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Make form elements respect their container padding */
+form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Override for Quill editor to match other input widths */
+quill-editor {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Custom styling for the quill editor to match other form elements */
+::ng-deep .quill-editor {
+  .ql-container,
+  .ql-toolbar {
+    border-color: #ced4da;
+  }
+  
+  .ql-toolbar {
+    border-radius: 0.25rem 0.25rem 0 0;
+  }
+  
+  .ql-container {
+    border-radius: 0 0 0.25rem 0.25rem;
+  }
+}
+
+/* Button styling */
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+
+  &:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+  }
+}
+
+// Add these important style overrides
+.medium-title-input {
+  font-size: 2rem !important;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #212529;
+}
+
+.medium-preface-input {
+  font-size: 1.25rem !important;
+  line-height: 1.5;
+  color: #495057;
+}
+
+/* Preview image gallery */
+.img-thumbnail {
+  object-fit: cover;
+}
+
+/* Consistent padding for the content section and other elements */
+.mb-4,
+.mb-3,
+.medium-style-input,
+.d-flex.justify-content-end {
+  padding: 0 10px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Button container styling */
+.d-flex.justify-content-end {
+  /* padding already defined in common styles */
+}
+
+/* Blog post form specific styles */
+.blog-post-form {
+  width: 100%;
+  box-sizing: border-box;
+  
+  /* Apply consistent padding to all form elements */
+  .medium-style-input,
+  .mb-4,
+  .mb-3,
+  .d-flex.justify-content-end {
+    padding: 0 10px;
+  }
+  
+  /* Remove the max-width constraint that's causing misalignment */
+  .medium-style-input .input-container {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+  }
+
+  .medium-style-input {
+    position: relative;
+    margin-bottom: 1.5rem;
+
+    .input-container {
+      position: relative;
+    }
+
+    .floating-label {
+      position: absolute;
+      pointer-events: none;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: 0.2s ease all;
+      color: #6c757d;
+
+      &.filled {
+        top: -20px;
+        left: 0;
+        font-size: 12px;
+        color: #495057;
+      }
+
+      &.preface-label {
+        top: 10px;
+        transform: none;
+
+        &.filled {
+          top: -20px;
+        }
+      }
+    }
+  }
+
+  .medium-title-input,
+  .medium-preface-input {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    width: 100%;
+    background-color: #fff;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+    &:focus {
+      border-color: #80bdff;
+      outline: 0;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    }
+  }
+
+  .thumbnail-upload-container {
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 1.5rem;
+    background-color: #f8f9fa;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: #adb5bd;
+      background-color: #e9ecef;
+    }
+
+    .thumbnail-preview {
+      position: relative;
+      max-width: 300px;
+
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: 4px;
+      }
+
+      .btn-danger {
+        opacity: 0;
+        transition: opacity 0.2s ease;
+      }
+
+      &:hover .btn-danger {
+        opacity: 1;
+      }
+    }
+
+    .upload-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 150px;
+      
+      .btn-outline-primary {
+        border-width: 2px;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+      }
+    }
+  }
+}

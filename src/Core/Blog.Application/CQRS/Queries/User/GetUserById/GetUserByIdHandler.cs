@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Blog.Application.DTOs.User;
 using Blog.Application.Exceptions;
-using Blog.Application.Repositories;
+using Blog.Application.Repositories.User;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -47,7 +47,7 @@ namespace Blog.Application.CQRS.Queries.User.GetUserById
                 if (user == null)
                     throw new UserNotFoundException();
 
-                var userDto = _mapper.Map<UserDto>(user);
+                var userDto = _mapper.Map<AuthorDto>(user);
 
                 var response = new GetUserByIdResponse()
                 {

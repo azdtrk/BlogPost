@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
-using Blog.Application.CQRS.Queries.Comment.GetAllComments;
 using Blog.Application.DTOs.Comment;
 using Blog.Application.Exceptions;
-using Blog.Application.Repositories;
+using Blog.Application.Repositories.Comment;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ValidationException = FluentValidation.ValidationException;
 
-namespace Blog.Application.CQRS.Queries.BlogPost.GelAllBlogPosts
+namespace Blog.Application.CQRS.Queries.Comment.GetAllComments
 {
     public class GetAllCommentsHandler : IRequestHandler<GetAllCommentsRequest, GetAllCommentsResponse>
     {

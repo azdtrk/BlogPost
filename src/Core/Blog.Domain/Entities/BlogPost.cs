@@ -1,4 +1,5 @@
-﻿using Blog.Domain.Common;
+﻿using System.ComponentModel.DataAnnotations;
+using Blog.Domain.Common;
 
 namespace Blog.Domain.Entities
 {
@@ -6,11 +7,12 @@ namespace Blog.Domain.Entities
     {
         public string Title { get; set; } = string.Empty;
 
+        [MaxLength(200)]
         public string Preface { get; set; } = string.Empty;
 
         public string Content { get; set; } = string.Empty;
 
-        public bool CanBePublished { get; set; } = false;
+        public bool CanBePublished { get; set; }
 
         public DateTime DateUpdated { get; set; }
 
@@ -19,7 +21,7 @@ namespace Blog.Domain.Entities
         #region Navigation Properties
 
         public Guid AuthorId { get; set; }
-        public User Author { get; set; } = new User();
+        public Author Author { get; set; }
 
         public ICollection<Comment>? Comments { get; set; }
         
@@ -27,12 +29,13 @@ namespace Blog.Domain.Entities
 
         public Guid? ThumbnailImageId { get; set; }
         public Image? ThumbnailImage { get; set; }
-
         #endregion
 
         public BlogPost()
         {
             DateUpdated = DateTime.Now;
+            Author = new Author();
+            CanBePublished = false;
         }
 
     }

@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Blog.WebApi.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class BaseController : ControllerBase
     {
         private IMediator _mediator;

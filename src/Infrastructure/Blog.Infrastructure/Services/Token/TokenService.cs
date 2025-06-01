@@ -40,7 +40,7 @@ namespace Blog.Infrastructure.Services.Token
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SecurityKey"]!));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var tokenExpires = DateTime.UtcNow.AddHours(1);
 
@@ -58,7 +58,8 @@ namespace Blog.Infrastructure.Services.Token
             TokenDto tokenResponse = new TokenDto()
             {
                 AccessToken = accessToken,
-                RefreshToken = refreshToken
+                RefreshToken = refreshToken,
+                Expiration = tokenExpires
             };
 
             return tokenResponse;
@@ -74,7 +75,7 @@ namespace Blog.Infrastructure.Services.Token
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = _configuration["JWT:Issuer"],
                 ValidAudience = _configuration["JWT:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!))
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SecurityKey"]!))
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();

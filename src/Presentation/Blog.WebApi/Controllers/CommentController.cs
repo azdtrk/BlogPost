@@ -10,6 +10,8 @@ using System.Net;
 
 namespace Blog.WebApi.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class CommentController : BaseController
     {
 
@@ -49,7 +51,7 @@ namespace Blog.WebApi.Controllers
 
         [HttpDelete]
         [Authorize(Roles = "Author")]
-        [AuthorizeDefinition(ActionType = ActionType.Reading, Definition = "Delete comment")]
+        [AuthorizeDefinition(ActionType = ActionType.Deleting, Definition = "Delete comment")]
         public async Task<IActionResult> Delete([FromBody] DeleteCommentRequest deleteCommentRequest)
         {
             await this.Mediator.Send(deleteCommentRequest);

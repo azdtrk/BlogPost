@@ -1,11 +1,9 @@
-﻿using Blog.Domain.Entities;
+﻿using Blog.Application.Repositories.Endpoint;
 using Blog.Persistance.Context;
-using Blog.Persistance.Repositories;
-using ETicaretAPI.Application.Repositories;
 
-namespace ETicaretAPI.Persistence.Repositories
+namespace Blog.Persistance.Repositories.Endpoint
 {
-    public class EndpointWriteRepository : WriteRepository<Endpoint>, IEndpointWriteRepository
+    public class EndpointWriteRepository : WriteRepository<Domain.Entities.Endpoint>, IEndpointWriteRepository
     {
         public EndpointWriteRepository(ApplicationDbContext context) : base(context)
         {

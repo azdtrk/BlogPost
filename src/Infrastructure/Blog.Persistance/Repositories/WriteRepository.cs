@@ -34,7 +34,9 @@ namespace Blog.Persistance.Repositories
         public async Task<bool> RemoveAsync(Guid id)
         {
             T model = await Table.FirstOrDefaultAsync(data => data.Id == id);
-            await _context.SaveChangesAsync();
+            if (model == null)
+                return false;
+                
             return Remove(model);
         }
 

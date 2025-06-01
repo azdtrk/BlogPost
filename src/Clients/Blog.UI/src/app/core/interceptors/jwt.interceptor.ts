@@ -18,25 +18,54 @@ export class JwtInterceptor implements HttpInterceptor {
     private router: Router
   ) {}
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const token = this.authService.getToken();
-    
-    if (token) {
-      request = request.clone({
-        setHeaders: {
-          Authorization: `Bearer ${token}`
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    if (request.url.includes('/api/BlogPost/upload-image')) {
+      return next.handle(request);
+    }
+
+    if (request.url.startsWith('/api')) {
+      const token = this.authService.getToken();
+
+      const isLoginRequest = request.url.includes('/auth/login');
+      const isFormData = request.body instanceof FormData;
+
+      if (token) {
+        const headers: { [key: string]: string } = {};
+
+        headers['Authorization'] = `Bearer ${token}`;
+
+        if (!isLoginRequest && !isFormData) {
+          headers['Content-Type'] = 'application/json';
         }
-      });
+
+        request = request.clone({
+          setHeaders: headers
+        });
+      } else if (!isLoginRequest && !isFormData) {
+        request = request.clone({
+          setHeaders: {
+            'Content-Type': 'application/json'
+          }
+        });
+      }
     }
 
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
+          localStorage.removeItem('token');
           this.authService.logout();
-          this.router.navigate(['/auth']);
+          const currentUrl = this.router.url;
+          localStorage.setItem('redirectUrl', currentUrl);
+          this.router.navigate(['/login'], {
+            queryParams: {
+              returnUrl: currentUrl,
+              expired: 'true'
+            }
+          });
         }
         return throwError(() => error);
       })
     );
   }
-} 
+}
