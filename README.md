@@ -21,7 +21,7 @@ At the Infrastructure Layer:
 Client Applications/Consumers
 - There is one Angular consumer application in this layer which will basically be the UI of the application.
 
-Why CQRS: Seperating Commands and Queries has several benefits such as:
+Why to implement CQRS is that because separating Commands and Queries has some benefits such as:
 - It gives us the flexibility of optimizing and scaling our the read and write operations. We may consider seperating our write database and read database since read and write operations usually have different expectations when it comes to scaling. Since it's a BlogPost website most of the database accesses will be read-heavy use cases. As the audience grows, so the need for seperating the read and write servers, that's why CQRS might be a good idea.
 - Another benefit is the ability to do all the mappings and conversions between actual models and DTOs in the Application layer which Clean Code/Clean Architecture principles advise us to do. CQRS fits Onion Architecture perfectly well in this manner.
 
