@@ -3,10 +3,10 @@
 - This Blog Application basically consists of mainly two use cases where only Admin user can login to use Admin Dashboard to create a Post and Reader users where they can use it to read the blogposts. (Commenting functionality will be developed later)
 - Main purpose of developing such a basic project on Onion Architecture or some other design choices which might seem to be overengineering at first, is to practice the following development technologies, methods or libraries by implementing the best practices around the idea of 'How can we implement a Medium-Like application' if we were to design it.
    * [Fluent Api](https://learn.microsoft.com/en-us/ef/ef6/modeling/code-first/fluent/types-and-properties) to configure data models between application and database.
-   * [Fluent Validation] (https://docs.fluentvalidation.net/en/latest/aspnet.html) for request validation.
-   * [MediatR] (https://github.com/jbogard/MediatR) setup for transferring Request-Response between Application and Presentation layers as well as setting up a common validation pipeline combining the fluent validation.
-   * [CQRS] (https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs) Pattern for preparing the ground to better scalability for an application where the load on Read operations will be much more compared to write operations.
-   * [ASP.NET Core Identity] (https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-9.0&tabs=visual-studio) for role based authentication and combined with [JWT] (https://jwt.io/introduction) for token-based authentication.
+   * [Fluent Validation](https://docs.fluentvalidation.net/en/latest/aspnet.html) for request validation.
+   * [MediatR](https://github.com/jbogard/MediatR) setup for transferring Request-Response between Application and Presentation layers as well as setting up a common validation pipeline combining the fluent validation.
+   * [CQRS](https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs) Pattern for preparing the ground to better scalability for an application where the load on Read operations will be much more compared to write operations.
+   * [ASP.NET Core Identity] (https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-9.0&tabs=visual-studio) for role based authentication and combined with [JWT](https://jwt.io/introduction) for token-based authentication.
 
 # Project Structure:
 
