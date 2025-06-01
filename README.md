@@ -6,7 +6,7 @@
    * [Fluent Validation] (https://docs.fluentvalidation.net/en/latest/aspnet.html) for request validation.
    * [MediatR] (https://github.com/jbogard/MediatR) setup for transferring Request-Response between Application and Presentation layers as well as setting up a common validation pipeline combining the fluent validation.
    * [CQRS] (https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs) Pattern for preparing the ground to better scalability for an application where the load on Read operations will be much more compared to write operations.
-   * [ASP.NETCoreIdentity] (https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-9.0&tabs=visual-studio) for role based authentication and combined with [JWT] (https://jwt.io/introduction) for token-based authentication.
+   * [ASP.NET Core Identity] (https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity?view=aspnetcore-9.0&tabs=visual-studio) for role based authentication and combined with [JWT] (https://jwt.io/introduction) for token-based authentication.
 
 # Project Structure:
 
