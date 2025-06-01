@@ -19,7 +19,7 @@ At the Infrastructure Layer:
 - Database operations and context configurations.
 
 Client Applications/Consumers
-- Three is one Angular consumer application in this layer which will be an entry point for API CRUD operations.
+- There is one Angular consumer application in this layer which will basically be the UI of the application.
 
 Why CQRS: Seperating Commands and Queries has several benefits such as:
 - It gives us the flexibility of optimizing and scaling our the read and write operations. We may consider seperating our write database and read database since read and write operations usually have different expectations when it comes to scaling. Since it's a BlogPost website most of the database accesses will be read-heavy use cases. As the audience grows, so the need for seperating the read and write servers, that's why CQRS might be a good idea.
