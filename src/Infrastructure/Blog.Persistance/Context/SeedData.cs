@@ -178,7 +178,7 @@ namespace Blog.Persistance.Context
 
             // Check if admin user already exists
             const string adminUsername = "admin";
-            const string adminEmail = "azdtrk@gmail.com";
+            const string adminEmail = "admin@gmail.com";
 
             if (await userManager.FindByNameAsync(adminUsername) != null)
             {

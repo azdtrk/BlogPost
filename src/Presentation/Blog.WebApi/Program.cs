@@ -74,21 +74,32 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngularApp", policy =>
     {
-        policy.WithOrigins(
-                "http://localhost:4200",     // Angular app
-                "https://localhost:4200",
-                "http://localhost:5000",
-                "https://localhost:5000",
-                "http://localhost:5001",
-                "https://localhost:5001",
-                "http://127.0.0.1:4200",
-                "https://127.0.0.1:4200",
-                "https://localhost:7165"     // Add the Swagger UI origin
-              )
-              .AllowAnyMethod()
-              .AllowAnyHeader()
-              .WithExposedHeaders("Content-Disposition")
-              .SetIsOriginAllowed(_ => true); // For development only - remove in production
+        if (builder.Environment.IsDevelopment())
+        {
+            policy.WithOrigins(
+                    "http://localhost:4200",     // Angular app
+                    "https://localhost:4200",
+                    "http://localhost:5000",
+                    "https://localhost:5000",
+                    "http://localhost:5001",
+                    "https://localhost:5001",
+                    "http://127.0.0.1:4200",
+                    "https://127.0.0.1:4200",
+                    "https://localhost:7165"     // Add the Swagger UI origin
+                  )
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .WithExposedHeaders("Content-Disposition")
+                  .SetIsOriginAllowed(_ => true); // For development only
+        }
+        else
+        {
+            // Production CORS - more restrictive
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .WithExposedHeaders("Content-Disposition");
+        }
     });
 });
 
@@ -186,12 +197,19 @@ app.UseHttpsRedirection();
 app.UseCors("AllowAngularApp");
 
 app.UseRouting();
+
+// Configure static files to serve Angular app
+app.UseDefaultFiles();
 app.UseStaticFiles();
+
 app.UseAuthentication(); 
 app.UseAuthorization();
 app.UseMiddleware<ErrorHandlerMiddleware>();
 
 app.MapControllers();
+
+// Add fallback routing for Angular SPA
+app.MapFallbackToFile("index.html");
 
 try
 {

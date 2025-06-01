@@ -1,9 +1,10 @@
 services:
   # SQL Server service
   db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+    image: mcr.microsoft.com/azure-sql-edge:latest
     container_name: blog_db
     restart: always
+    user: "0:0"  # Run as root to avoid permission issues
     secrets:
       - db_password
     environment:
@@ -18,11 +19,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      start_period: 10s
+      start_period: 30s
     networks:
       - blog-network
 
-  # ASP.NET Core API
+  # ASP.NET Core API with Angular Frontend
   api:
     build:
       context: .
@@ -35,7 +36,7 @@ services:
         condition: service_healthy
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=https://+:80
+      - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__DefaultConnectionString=Server=db,1433;Database=MyBlogPostDb;User Id=sa;Password=$${DB_PASSWORD};TrustServerCertificate=true;
     ports:
       - "8080:80"
@@ -45,7 +46,7 @@ services:
     command:
       - |
         export DB_PASSWORD=$$(cat /run/secrets/db_password)
-        # Run migrations
+        # Run the application
         dotnet Blog.WebApi.dll
     networks:
       - blog-network
