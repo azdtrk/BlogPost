@@ -24,3 +24,53 @@ Client Applications/Consumers
 Why CQRS: Seperating Commands and Queries has several benefits such as:
 - It gives us the flexibility of optimizing and scaling our the read and write operations. We may consider seperating our write database and read database since read and write operations usually have different expectations when it comes to scaling. Since it's a BlogPost website most of the database accesses will be read-heavy use cases. As the audience grows, so the need for seperating the read and write servers, that's why CQRS might be a good idea.
 - Another benefit is the ability to do all the mappings and conversions between actual models and DTOs in the Application layer which Clean Code/Clean Architecture principles advise us to do. CQRS fits Onion Architecture perfectly well in this manner.
+
+
+## Authentication and Authorization
+
+### Admin User
+
+The application comes with a pre-configured admin user. The admin user is automatically created when the application starts if it doesn't already exist.
+
+- Username: `admin`
+- Email: `admin@gmail.com`
+- Password: Stored in user secrets
+
+The admin password is stored in user secrets for security reasons and not hardcoded in the source code.
+
+### Password Security
+
+All passwords in the application are securely stored using ASP.NET Core Identity's password hashing. Passwords are:
+
+1. Never stored in plain text and only password hashes are stored
+2. Hashed using strong cryptographic algorithms (PBKDF2 with HMAC-SHA256)
+3. Protected with a unique salt for each user to prevent rainbow table attacks
+4. The plaintext Password field has been removed from the User entity in favor of only storing PasswordHash
+
+Even administrators cannot see users' passwords as they are one-way hashed. The same secure approach is used for:
+- Admin users created during application seeding
+- Reader users who register through the UI
+- Any users created through API endpoints
+
+### Managing User Secrets
+
+To update the admin password: (you should set your own before running the app)
+
+```bash
+cd src/Presentation/Blog.WebApi
+dotnet user-secrets set "AdminCredentials:Password" "YourNewSecurePassword"
+```
+
+## Authorization System
+
+The application uses a hybrid approach for authorization:
+1. ASP.NET Core Identity's role-based authorization
+2. Custom endpoint-based permissions
+
+## Setup in Development Environment
+
+To set up the admin user in development:
+
+1. The user secrets are already initialized with the project
+2. The admin user is created at application startup
+3. You can log in with the admin credentials 
