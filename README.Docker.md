@@ -27,8 +27,6 @@ Follow these steps to set up the application:
    chmod 600 secrets/db_password.txt  # Restrict access to the file
    ```
 
-   > ⚠️ **Security Note**: For production environments, never commit the password file to version control. Add `secrets/` to your `.gitignore` file.
-
 3. Start the application:
    ```
    docker compose up -d
@@ -42,8 +40,8 @@ Follow these steps to set up the application:
    - Start the application
 
 4. Access the application:
-   - API: http://localhost:8080
-   - Swagger UI: http://localhost:8080/swagger
+   - API (Backend UI): [Swagger](https://localhost:7165/swagger/index.html)
+   - Front-End UI: [Angular UI](http://localhost:4200/blog)
 
 ## Environment Configuration
 
@@ -57,18 +55,7 @@ The Docker Compose setup uses environment variables and Docker secrets to config
 
 If you encounter issues:
 
-1. Check container logs:
-   ```
-   docker compose logs api
-   docker compose logs db
-   ```
-
-2. Ensure the SQL Server container is healthy:
-   ```
-   docker compose ps
-   ```
-
-3. Manually connect to the database:
+Manually try connecting to the database:
    ```
    docker exec -it blog_db /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $(cat secrets/db_password.txt)
    ```
@@ -100,22 +87,7 @@ For local development:
 When you're ready, start your application by running:
 `docker compose up --build`.
 
-Your application will be available at http://localhost:8080.
-
-### Deploying your application to the cloud
-
-First, build your image, e.g.: `docker build -t myapp .`.
-If your cloud uses a different CPU architecture than your development
-machine (e.g., you are on a Mac M1 and your cloud provider is amd64),
-you'll want to build the image for that platform, e.g.:
-`docker build --platform=linux/amd64 -t myapp .`.
-
 Then, push it to your registry, e.g. `docker push myregistry.com/myapp`.
 
 Consult Docker's [getting started](https://docs.docker.com/go/get-started-sharing/)
 docs for more detail on building and pushing.
-
-### References
-* [Docker's .NET guide](https://docs.docker.com/language/dotnet/)
-* The [dotnet-docker](https://github.com/dotnet/dotnet-docker/tree/main/samples)
-  repository has many relevant samples and docs.
