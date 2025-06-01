@@ -1,6 +1,6 @@
 
 
-- This Blog Application basically consists of mainly two use cases where only Admin user can login to use Admin Dashboard to create a Post and Reader users where they can use it to read the blogposts. (Commenting functionality will be developed later)
+- This Blog Application basically consists of two use cases where only Admin user can login to use Admin Dashboard to create a Post and Reader users where they can use it to read the blogposts. (Commenting functionality will be developed later)
 - Main purpose of developing such a basic project on Onion Architecture or some other design choices which might seem to be overengineering at first, is to practice the following development technologies, methods or libraries by implementing the best practices around the idea of 'How can we implement a Medium-Like application' if we were to design it.
    * [Fluent Api](https://learn.microsoft.com/en-us/ef/ef6/modeling/code-first/fluent/types-and-properties) to configure data models between application and database.
    * [Fluent Validation](https://docs.fluentvalidation.net/en/latest/aspnet.html) for request validation.
